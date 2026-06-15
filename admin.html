@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Taj Gurukul Lead & Content Management</title>
+  
+  <!-- CSS Link & FontAwesome -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="admin.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="admin-body">
+
+  <!-- Password Security Overlay -->
+  <div class="admin-login-overlay" id="loginOverlay">
+    <div class="login-card">
+      <div class="login-icon">
+        <i class="fa-solid fa-shield-halved"></i>
+      </div>
+      <h2>Secure Portal Login</h2>
+      <p>Enter administrative access key to manage Taj Gurukul leads and content.</p>
+      
+      <form id="adminLoginForm" class="login-form">
+        <div class="form-group">
+          <label for="adminPassword" style="font-weight:600; display:block; margin-bottom:6px; font-size:0.85rem;">Access Key *</label>
+          <input type="password" id="adminPassword" class="form-control" placeholder="••••••••" required autocomplete="current-password">
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; border-radius: 6px; margin-top: 15px; padding:12px;">Verify Credentials</button>
+        <div class="login-error" id="loginErrorMsg" style="color:var(--accent-gold); font-size:0.85rem; margin-top:10px; display:none;">Invalid Access Key! Please try again.</div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Admin Sidebar Layout -->
+  <aside class="admin-sidebar" id="adminSidebar">
+    <div class="admin-brand">
+      <img src="assets/logo.png" alt="Logo" style="width: 32px; height: 32px; border-radius: 50%; background-color: var(--white); object-fit: contain;">
+      <div class="logo-text">
+        <span class="logo-title" style="color: var(--white); font-size: 1.1rem; letter-spacing: 0.5px;">Taj Gurukul</span>
+        <span class="logo-tagline" style="font-size:0.6rem; color: var(--accent-gold-bright);">Admin Desk</span>
+      </div>
+    </div>
+    
+    <nav class="admin-nav">
+      <a href="#analytics" class="admin-nav-item active" data-tab="analytics">
+        <i class="fa-solid fa-chart-pie"></i> Dashboard Overview
+      </a>
+      <a href="#enquiries" class="admin-nav-item" data-tab="enquiries">
+        <i class="fa-solid fa-clipboard-list"></i> Course Enquiries
+      </a>
+      <a href="#counselling" class="admin-nav-item" data-tab="counselling">
+        <i class="fa-solid fa-user-graduate"></i> Counselling Requests
+      </a>
+      <a href="#courses" class="admin-nav-item" data-tab="courses">
+        <i class="fa-solid fa-book-open"></i> Manage Courses
+      </a>
+      <a href="#testimonials" class="admin-nav-item" data-tab="testimonials">
+        <i class="fa-solid fa-comments"></i> Manage Testimonials
+      </a>
+      <a href="#gallery" class="admin-nav-item" data-tab="gallery">
+        <i class="fa-solid fa-images"></i> Manage Gallery
+      </a>
+      <a href="#announcements" class="admin-nav-item" data-tab="announcements">
+        <i class="fa-solid fa-bullhorn"></i> Announcements
+      </a>
+      <a href="#faculty" class="admin-nav-item" data-tab="faculty">
+        <i class="fa-solid fa-graduation-cap"></i> Manage Faculty
+      </a>
+    </nav>
+    
+    <div class="admin-footer">
+      <button class="admin-logout-btn" id="adminLogoutBtn">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+      </button>
+    </div>
+  </aside>
+
+  <!-- Admin Main Working Area -->
+  <main class="admin-main">
+    <div class="admin-header">
+      <div class="admin-title-wrap">
+        <h2 id="currentTabTitle">Dashboard Overview</h2>
+        <p id="currentTabDesc">Real-time statistics, conversion analysis, and content directories.</p>
+      </div>
+      <div class="admin-user">
+        <div class="logo-tagline" id="adminServerStatus" style="color: var(--primary-navy-light); font-weight:600;">Status: Checking Connection...</div>
+        <div class="admin-avatar" style="background-color: var(--accent-gold-bright); color: var(--white); font-weight:700;">A</div>
+      </div>
+    </div>
+
+    <!-- TAB 1: Analytics Overview -->
+    <section id="tab-analytics" class="admin-section active">
+      <div class="analytics-grid">
+        <div class="widget-card">
+          <div class="widget-info">
+            <h4>Total Enquiries</h4>
+            <div class="widget-val" id="countEnquiries">0</div>
+          </div>
+          <div class="widget-icon blue" style="background-color: rgba(59, 130, 246, 0.1); color: #3b82f6;"><i class="fa-solid fa-envelope-open-text"></i></div>
+        </div>
+        <div class="widget-card">
+          <div class="widget-info">
+            <h4>Counselling Requests</h4>
+            <div class="widget-val" id="countCounselling">0</div>
+          </div>
+          <div class="widget-icon yellow" style="background-color: rgba(245, 158, 11, 0.1); color: #f59e0b;"><i class="fa-solid fa-circle-nodes"></i></div>
+        </div>
+        <div class="widget-card">
+          <div class="widget-info">
+            <h4>Enrolled Students</h4>
+            <div class="widget-val" id="countEnrolled">0</div>
+          </div>
+          <div class="widget-icon green" style="background-color: rgba(16, 185, 129, 0.1); color: #10b981;"><i class="fa-solid fa-user-check"></i></div>
+        </div>
+        <div class="widget-card">
+          <div class="widget-info">
+            <h4>Conversion Rate</h4>
+            <div class="widget-val" id="conversionRate">0%</div>
+          </div>
+          <div class="widget-icon purple" style="background-color: rgba(220, 38, 38, 0.1); color: var(--accent-gold-bright);"><i class="fa-solid fa-chart-line"></i></div>
+        </div>
+      </div>
+
+      <div class="dashboard-grid">
+        <!-- Chart representation -->
+        <div class="chart-card">
+          <h3>Lead Funnel Analysis</h3>
+          <div class="lead-chart-container">
+            <div class="chart-bar-row">
+              <span class="chart-label">New Leads</span>
+              <div class="chart-bar-bg">
+                <div class="chart-bar-fill" id="barNew" style="background-color: #3b82f6; width: 0%;"></div>
+              </div>
+              <span class="chart-val" id="valNew">0</span>
+            </div>
+            <div class="chart-bar-row">
+              <span class="chart-label">Contacted</span>
+              <div class="chart-bar-bg">
+                <div class="chart-bar-fill" id="barContacted" style="background-color: #f59e0b; width: 0%;"></div>
+              </div>
+              <span class="chart-val" id="valContacted">0</span>
+            </div>
+            <div class="chart-bar-row">
+              <span class="chart-label">Enrolled</span>
+              <div class="chart-bar-bg">
+                <div class="chart-bar-fill" id="barEnrolled" style="background-color: #10b981; width: 0%;"></div>
+              </div>
+              <span class="chart-val" id="valEnrolled">0</span>
+            </div>
+            <div class="chart-bar-row">
+              <span class="chart-label">Archived</span>
+              <div class="chart-bar-bg">
+                <div class="chart-bar-fill" id="barArchived" style="background-color: #64748b; width: 0%;"></div>
+              </div>
+              <span class="chart-val" id="valArchived">0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- System Status Summary -->
+        <div class="chart-card">
+          <h3>Active Content Directory</h3>
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--border-color); padding-bottom:8px;">
+              <span>Active Course Listing</span>
+              <strong id="cardActiveCourses">0</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--border-color); padding-bottom:8px;">
+              <span>Featured Testimonials</span>
+              <strong id="cardActiveReviews">0</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--border-color); padding-bottom:8px;">
+              <span>Gallery Photo Count</span>
+              <strong id="cardActivePhotos">0</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--border-color); padding-bottom:8px;">
+              <span>Active Announcements</span>
+              <strong id="cardActiveAnnouncements">0</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding-bottom:4px;">
+              <span>Campus Faculty Members</span>
+              <strong id="cardActiveFaculty">0</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: Course Admission Enquiries -->
+    <section id="tab-enquiries" class="admin-section">
+      <div class="table-card">
+        <div class="table-header">
+          <h3>Online Admission Enquiries</h3>
+          <div class="table-filters">
+            <select class="filter-select" id="enquiryStatusFilter" style="border-color: var(--accent-gold-bright);">
+              <option value="all">All Statuses</option>
+              <option value="New">New</option>
+              <option value="Contacted">Contacted</option>
+              <option value="Enrolled">Enrolled</option>
+              <option value="Archived">Archived</option>
+            </select>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table id="enquiriesTable">
+            <thead>
+              <tr>
+                <th>Student Name</th>
+                <th>Mobile Number</th>
+                <th>Course Target</th>
+                <th>Submission Date</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Dynamic entries -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: Counselling Requests -->
+    <section id="tab-counselling" class="admin-section">
+      <div class="table-card">
+        <div class="table-header">
+          <h3>Counselling Mentorship Requests</h3>
+          <div class="table-filters">
+            <select class="filter-select" id="counsellingStatusFilter" style="border-color: var(--accent-gold-bright);">
+              <option value="all">All Statuses</option>
+              <option value="New">New</option>
+              <option value="Contacted">Contacted</option>
+              <option value="Enrolled">Enrolled</option>
+              <option value="Archived">Archived</option>
+            </select>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table id="counsellingTable">
+            <thead>
+              <tr>
+                <th>Student Name</th>
+                <th>Mobile Number</th>
+                <th>Grade</th>
+                <th>Exam Target</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Dynamic entries -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: Manage Courses -->
+    <section id="tab-courses" class="admin-section">
+      <div class="form-card">
+        <h3>Create New Academic Program</h3>
+        <form id="addCourseForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="newCourseName">Program Name *</label>
+              <input type="text" id="newCourseName" class="form-control" placeholder="e.g. NEET UG Advanced Crash Course" required>
+            </div>
+            <div class="form-group">
+              <label for="newCourseCategory">Category Filter *</label>
+              <select id="newCourseCategory" class="form-control" required>
+                <option value="neet">NEET (Medical)</option>
+                <option value="jee">IIT-JEE (Engineering)</option>
+                <option value="cet">MHT-CET (State Entrance)</option>
+                <option value="nda">NDA Foundation</option>
+                <option value="foundation">Junior Foundation (8th-10th)</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="newCourseBadge">Card Badge Text *</label>
+              <input type="text" id="newCourseBadge" class="form-control" placeholder="e.g. NEET 2027" required>
+            </div>
+            <div class="form-group">
+              <label for="newCourseImg">Unsplash Photo / URL *</label>
+              <input type="url" id="newCourseImg" class="form-control" placeholder="https://images.unsplash.com/photo-..." required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="newCourseDesc">Short Description *</label>
+            <textarea id="newCourseDesc" class="form-control" rows="2" placeholder="Brief outline of the course structure..." required></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="newCourseFeat1">Feature Highlight 1 *</label>
+              <input type="text" id="newCourseFeat1" class="form-control" placeholder="e.g. Daily Concept Worksheets" required>
+            </div>
+            <div class="form-group">
+              <label for="newCourseFeat2">Feature Highlight 2</label>
+              <input type="text" id="newCourseFeat2" class="form-control" placeholder="e.g. Doubt Solving Sessions">
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary" style="border-radius: 6px; padding:12px 30px;">Add Academic Program</button>
+        </form>
+      </div>
+
+      <div class="table-card">
+        <div class="table-header">
+          <h3>Active Courses List</h3>
+        </div>
+        <div class="table-responsive">
+          <table id="adminCoursesTable">
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Program Name</th>
+                <th>Category</th>
+                <th>Badge</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Course items CRUD lists -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: Manage Testimonials -->
+    <section id="tab-testimonials" class="admin-section">
+      <div class="form-card">
+        <h3>Add Student / Parent Review</h3>
+        <form id="addTestimonialForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="newTestName">Reviewer Name *</label>
+              <input type="text" id="newTestName" class="form-control" placeholder="e.g. Mr. K. Deshmukh" required>
+            </div>
+            <div class="form-group">
+              <label for="newTestRole">Designation / Role *</label>
+              <input type="text" id="newTestRole" class="form-control" placeholder="e.g. Parent of JEE Batch Student" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="newTestStars">Rating (1-5 Stars) *</label>
+              <select id="newTestStars" class="form-control" required>
+                <option value="5">5 Stars Rating</option>
+                <option value="4">4 Stars Rating</option>
+                <option value="3">3 Stars Rating</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="newTestText">Review Message Content *</label>
+            <textarea id="newTestText" class="form-control" rows="3" placeholder="Paste the feedback comments here..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" style="border-radius: 6px; padding:12px 30px;">Add Testimonial</button>
+        </form>
+      </div>
+
+      <div class="table-card">
+        <div class="table-header">
+          <h3>Existing Testimonials</h3>
+        </div>
+        <div class="table-responsive">
+          <table id="adminTestimonialsTable">
+            <thead>
+              <tr>
+                <th>Author</th>
+                <th>Designation</th>
+                <th>Stars</th>
+                <th>Short Snippet</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Testimonial items -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 6: Manage Gallery -->
+    <section id="tab-gallery" class="admin-section">
+      <div class="form-card">
+        <h3>Upload / Link Gallery Picture</h3>
+        <form id="addGalleryForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="newGalTitle">Image Caption *</label>
+              <input type="text" id="newGalTitle" class="form-control" placeholder="e.g. Smart Physics Lab" required>
+            </div>
+            <div class="form-group">
+              <label for="newGalGroup">Image Album Folder *</label>
+              <select id="newGalGroup" class="form-control" required>
+                <option value="classroom">Classroom</option>
+                <option value="events">Events</option>
+                <option value="seminars">Seminars</option>
+                <option value="achievements">Achievements</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="newGalUrl">Image Web Link / URL *</label>
+            <input type="url" id="newGalUrl" class="form-control" placeholder="https://images.unsplash.com/photo-..." required>
+          </div>
+          <button type="submit" class="btn btn-primary" style="border-radius: 6px; padding:12px 30px;">Link Picture</button>
+        </form>
+      </div>
+
+      <div class="table-card">
+        <div class="table-header">
+          <h3>Active Gallery Photos</h3>
+        </div>
+        <div class="table-responsive">
+          <table id="adminGalleryTable">
+            <thead>
+              <tr>
+                <th>Preview</th>
+                <th>Caption</th>
+                <th>Album Tag</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Gallery items -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 7: Manage Announcements -->
+    <section id="tab-announcements" class="admin-section">
+      <div class="form-card">
+        <h3>Publish Website Announcement Marquee</h3>
+        <form id="addAnnouncementForm">
+          <div class="form-group">
+            <label for="newAnnounceText">Notification Message *</label>
+            <input type="text" id="newAnnounceText" class="form-control" placeholder="e.g. ⚡ Special scholarship test on June 25th! Register now." required>
+          </div>
+          <button type="submit" class="btn btn-primary" style="border-radius: 6px; padding:12px 30px;">Publish Marquee</button>
+        </form>
+      </div>
+
+      <div class="table-card">
+        <div class="table-header">
+          <h3>Active Announcement Marquees</h3>
+        </div>
+        <div class="table-responsive">
+          <table id="adminAnnouncementsTable">
+            <thead>
+              <tr>
+                <th>Announcement Content</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Announcement lines -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 8: Manage Faculty -->
+    <section id="tab-faculty" class="admin-section">
+      <div class="form-card">
+        <h3>Add Faculty Member</h3>
+        <form id="addFacultyForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="newFacName">Faculty Name *</label>
+              <input type="text" id="newFacName" class="form-control" placeholder="e.g. Dr. Rajesh Sen" required>
+            </div>
+            <div class="form-group">
+              <label for="newFacRole">Subject / Role *</label>
+              <input type="text" id="newFacRole" class="form-control" placeholder="e.g. Senior Chemistry Guide" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="newFacQual">Qualifications & Experience *</label>
+              <input type="text" id="newFacQual" class="form-control" placeholder="e.g. Ph.D. (VNIT) | 10+ Years Exp." required>
+            </div>
+            <div class="form-group">
+              <label for="newFacImg">Profile Image URL *</label>
+              <input type="url" id="newFacImg" class="form-control" placeholder="https://images.unsplash.com/photo-..." required>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary" style="border-radius: 6px; padding:12px 30px;">Add Faculty Member</button>
+        </form>
+      </div>
+
+      <div class="table-card">
+        <div class="table-header">
+          <h3>Faculty Directory</h3>
+        </div>
+        <div class="table-responsive">
+          <table id="adminFacultyTable">
+            <thead>
+              <tr>
+                <th>Preview</th>
+                <th>Name</th>
+                <th>Subject/Role</th>
+                <th>Qualifications</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Faculty items -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- admin core script -->
+  <script src="admin.js"></script>
+</body>
+</html>

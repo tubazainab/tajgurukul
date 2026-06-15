@@ -1,0 +1,14 @@
+{
+  "name": "tajgurukul-website",
+  "version": "1.0.0",
+  "description": "Taj Gurukul Educational Institute Website Backend and CMS",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "author": "Taj Gurukul",
+  "license": "ISC"
+}

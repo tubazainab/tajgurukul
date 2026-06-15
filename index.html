@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Taj Gurukul – Excellence in NEET, JEE, MHT-CET & NDA Preparation</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Taj Gurukul is a premier coaching institute in Kamptee, Nagpur, providing quality education and personalized mentorship for NEET, JEE, MHT-CET, NDA, and Foundation Courses. Limited batches, regular mock tests, expert faculty.">
+  <meta name="keywords" content="Taj Gurukul, NEET Coaching Kamptee, JEE Classes Nagpur, MHT-CET Kamptee, NDA Foundation Nagpur, Best Tuition Classes Kamptee, Foundation Academy Nagpur">
+  <meta name="author" content="Taj Gurukul">
+  
+  <!-- CSS Link & FontAwesome -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <div class="top-bar">
+    <div class="container top-bar-container">
+      <div class="top-bar-info">
+        <a href="tel:+919595972517"><i class="fa-solid fa-phone"></i> +91 95959 72517</a>
+        <a href="mailto:tajgurukul.kamptee@gmail.com"><i class="fa-solid fa-envelope"></i> tajgurukul.kamptee@gmail.com</a>
+      </div>
+      <div class="announcement-ticker">
+        <div class="ticker-wrap" id="announcementsMarquee">
+          <span class="ticker-item"><i class="fa-solid fa-bullhorn"></i> Admissions Open for NEET & JEE 2026-27! Register for free counselling today.</span>
+          <span class="ticker-item"><i class="fa-solid fa-star"></i> Special NDA Foundation Batch starts soon! Limited seats.</span>
+          <span class="ticker-item"><i class="fa-solid fa-graduation-cap"></i> Congratulating our board toppers on amazing academic scores!</span>
+        </div>
+      </div>
+      <div class="top-bar-admin">
+        <a href="admin.html" target="_blank"><i class="fa-solid fa-lock-open"></i> Admin Portal</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header Section -->
+  <header>
+    <div class="container header-container">
+      <div class="logo-wrapper">
+        <a href="#home">
+          <img src="assets/logo.png" alt="Taj Gurukul Logo" style="height: 48px; width: 48px; border-radius: 50%; border: 2px solid var(--white); background-color: var(--white); object-fit: contain; padding: 2px;">
+          <div class="logo-text">
+            <span class="logo-title">TAJ GURUKUL</span>
+            <span class="logo-tagline">Excellence in Education</span>
+          </div>
+        </a>
+      </div>
+      
+      <!-- Desktop Menu -->
+      <nav class="nav-links" id="navMenu">
+        <a href="#home" class="active">Home</a>
+        <a href="#about">About</a>
+        <a href="#why-choose">Why Us</a>
+        <a href="#courses">Courses</a>
+        <a href="#faculty">Faculty</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#testimonials">Testimonials</a>
+        <a href="#counseling">Counselling</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <div class="header-actions">
+        <a href="#counseling" class="btn btn-primary" style="padding: 8px 20px; font-size: 0.85rem;">Book Counselling</a>
+      </div>
+
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle Menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero" id="home">
+    <div class="container hero-grid">
+      <div class="hero-content">
+        <span class="hero-tagline">Welcome to Taj Gurukul</span>
+        <h1 class="hero-title">Shape Your <span>Future</span> with Expert Guidance</h1>
+        <p class="hero-desc">
+          Taj Gurukul is a premier coaching institute in Kamptee, Nagpur, providing quality education and personalized mentorship for NEET, JEE, MHT-CET, NDA, and Foundation Courses.
+        </p>
+        <div class="hero-buttons">
+          <a href="#counseling" class="btn btn-primary">Book Free Career Counselling</a>
+          <a href="javascript:void(0)" class="btn btn-secondary" onclick="openEnquiryModal()">Enquire Now</a>
+        </div>
+      </div>
+      <div class="hero-image-wrapper">
+        <div class="hero-glow-circle"></div>
+        <div class="hero-card">
+          <h3>Super-30 Batch Admission</h3>
+          <p>Prepare under individual tracking system</p>
+          <div class="hero-features-list">
+            <div class="hero-feature-item">
+              <i class="fa-solid fa-circle-check"></i>
+              <span>Highly Experienced Mentors</span>
+            </div>
+            <div class="hero-feature-item">
+              <i class="fa-solid fa-circle-check"></i>
+              <span>Limited Batch Sizes (Max 30 Students)</span>
+            </div>
+            <div class="hero-feature-item">
+              <i class="fa-solid fa-circle-check"></i>
+              <span>Comprehensive Study Material</span>
+            </div>
+            <div class="hero-feature-item">
+              <i class="fa-solid fa-circle-check"></i>
+              <span>Weekly Mock Exams & Doubt Clearing</span>
+            </div>
+          </div>
+          <a href="#counseling" class="btn btn-primary" style="margin-top: 25px; width: 100%;">Apply Online</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Counter Section -->
+  <div class="stats-counter">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-number" data-target="15">0</div>
+          <div class="stat-label">Years of Experience</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" data-target="95">0</div>
+          <div class="stat-label">NEET/JEE Success %</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" data-target="1500">0</div>
+          <div class="stat-label">Mentored Students</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" data-target="30">0</div>
+          <div class="stat-label">Max Batch Size</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- About Us Section -->
+  <section class="about" id="about">
+    <div class="container about-grid">
+      <div class="about-img-box">
+        <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800&q=80" alt="About Taj Gurukul Classroom Study" class="about-img-main" loading="lazy">
+      </div>
+      <div class="about-text">
+        <span class="section-subtitle">About Our Institute</span>
+        <h2 class="about-desc-title" style="font-size: 2.2rem; color: var(--primary-navy); margin-bottom: 20px;">Dedicated to Academic Excellence</h2>
+        <p class="about-desc">
+          Taj Gurukul is a leading coaching institute dedicated to helping students achieve success in competitive examinations. With experienced faculty, personalized mentorship, and limited batch sizes, we ensure every student receives individual attention and academic support.
+        </p>
+        <p class="about-desc" style="margin-bottom: 30px;">
+          Our concept-based learning methodology bridges the gap between board examinations and national-level competitive tests, equipping aspirants with key problem-solving speed and logical reasoning skills.
+        </p>
+        <a href="#courses" class="btn btn-outline-navy">Explore Courses</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why Choose Us Section -->
+  <section class="why-choose bg-light" id="why-choose">
+    <div class="container">
+      <div class="section-title-wrapper">
+        <span class="section-subtitle">Our Features</span>
+        <h2 class="section-title">Why Choose Taj Gurukul?</h2>
+      </div>
+      <div class="why-choose-grid">
+        <!-- Grid Item 1 -->
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+          <h4>Experienced Faculty</h4>
+          <p>Learn from subject-matter experts who understand core concepts and exam dynamics.</p>
+        </div>
+        <!-- Grid Item 2 -->
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-user-tie"></i></div>
+          <h4>Personalized Mentorship</h4>
+          <p>Individual mentors guide students on preparation strategy, timeline, and exam temperament.</p>
+        </div>
+        <!-- Grid Item 3 -->
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-people-group"></i></div>
+          <h4>Small Batch Sizes</h4>
+          <p>Limited seats per classroom to encourage robust engagement and ensure focused tracking.</p>
+        </div>
+        <!-- Grid Item 4 -->
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-file-signature"></i></div>
+          <h4>Regular Mock Tests</h4>
+          <p>Bi-weekly mock tests designed in full compliance with the latest NEET, JEE, and NDA syllabus.</p>
+        </div>
+        <!-- Grid Item 5 -->
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-lightbulb"></i></div>
+          <h4>Doubt Solving Sessions</h4>
+          <p>Daily dedicated hours for clear individual doubt resolution with specialized faculty.</p>
+        </div>
+        <!-- Grid Item 6 -->
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-compass"></i></div>
+          <h4>Career Guidance</h4>
+          <p>Expert-led counseling sessions to help students find suitable goals and college choices.</p>
+        </div>
+        <!-- Grid Item 7 -->
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-chart-line"></i></div>
+          <h4>Performance Tracking</h4>
+          <p>Continuous monitoring of mock marks and progress reports for optimal performance.</p>
+        </div>
+        <!-- Grid Item 8 -->
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-handshake"></i></div>
+          <h4>Parent-Teacher Interaction</h4>
+          <p>Regular reviews to keep parents updated about their child's attendance and academic progress.</p>
+        </div>
+        <!-- Grid Item 9 -->
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-brain"></i></div>
+          <h4>Concept-Based Learning</h4>
+          <p>Ditching standard rote memory techniques for an immersive, practical visualization of subjects.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Courses Offered Section -->
+  <section class="courses" id="courses">
+    <div class="container">
+      <div class="section-title-wrapper">
+        <span class="section-subtitle">Academic Programs</span>
+        <h2 class="section-title">Courses We Offer</h2>
+      </div>
+      
+      <div class="courses-tabs">
+        <button class="tab-btn active" data-filter="all">All Courses</button>
+        <button class="tab-btn" data-filter="neet">NEET (UG)</button>
+        <button class="tab-btn" data-filter="jee">IIT-JEE</button>
+        <button class="tab-btn" data-filter="cet">MHT-CET</button>
+        <button class="tab-btn" data-filter="nda">NDA Foundation</button>
+        <button class="tab-btn" data-filter="foundation">Foundation (8th-10th)</button>
+      </div>
+
+      <div class="courses-grid" id="coursesGrid">
+        <!-- Course 1 -->
+        <div class="course-card" data-category="neet">
+          <div class="course-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=600&q=80" alt="NEET UG Medical Prep" loading="lazy">
+            <span class="course-badge">NEET</span>
+          </div>
+          <div class="course-content">
+            <h3 class="course-title">NEET (UG) - Medical Preparation</h3>
+            <p class="course-desc">Complete Medical Entrance preparation focusing on Biology, Chemistry, and Physics concept mastery.</p>
+            <div class="course-features">
+              <div class="course-feat-item"><i class="fa-solid fa-square-check"></i><span>Physics & Chemistry drills</span></div>
+              <div class="course-feat-item"><i class="fa-solid fa-square-check"></i><span>Detailed Biology visualization</span></div>
+              <div class="course-feat-item"><i class="fa-solid fa-square-check"></i><span>All India Test Series mapping</span></div>
+            </div>
+            <div class="course-footer">
+              <a href="javascript:void(0)" class="btn btn-outline-navy" style="font-size: 0.85rem; padding: 8px 18px;" onclick="openEnquiryModal('NEET (UG) - Medical Preparation')">Enquire Program</a>
+            </div>
+          </div>
+        </div>
+        <!-- Course 2 -->
+        <div class="course-card" data-category="jee">
+          <div class="course-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=600&q=80" alt="IIT JEE Engineering Prep" loading="lazy">
+            <span class="course-badge">IIT-JEE</span>
+          </div>
+          <div class="course-content">
+            <h3 class="course-title">IIT-JEE (Main & Advanced)</h3>
+            <p class="course-desc">Comprehensive engineering entrance preparation designed to crack advanced level concepts.</p>
+            <div class="course-features">
+              <div class="course-feat-item"><i class="fa-solid fa-square-check"></i><span>Advanced Mathematics modules</span></div>
+              <div class="course-feat-item"><i class="fa-solid fa-square-check"></i><span>Concept-based Physics sheets</span></div>
+              <div class="course-feat-item"><i class="fa-solid fa-square-check"></i><span>Organic & Physical chemistry tricks</span></div>
+            </div>
+            <div class="course-footer">
+              <a href="javascript:void(0)" class="btn btn-outline-navy" style="font-size: 0.85rem; padding: 8px 18px;" onclick="openEnquiryModal('IIT-JEE (Main & Advanced)')">Enquire Program</a>
+            </div>
+          </div>
+        </div>
+        <!-- Course 3 -->
+        <div class="course-card" data-category="cet">
+          <div class="course-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=600&q=80" alt="MHT CET Prep" loading="lazy">
+            <span class="course-badge">MHT-CET</span>
+          </div>
+          <div class="course-content">
+            <h3 class="course-title">MHT-CET State Entrance Prep</h3>
+            <p class="course-desc">Rigorous state level entrance course specializing in speed, recall and board exams synergy.</p>
+            <div class="course-features">
+              <div class="course-feat-item"><i class="fa-solid fa-square-check"></i><span>Speed calculation worksheets</span></div>
+              <div class="course-feat-item"><i class="fa-solid fa-square-check"></i><span>Full-length CET Mock Tests</span></div>
+              <div class="course-feat-item"><i class="fa-solid fa-square-check"></i><span>Formula sheet memory packs</span></div>
+            </div>
+            <div class="course-footer">
+              <a href="javascript:void(0)" class="btn btn-outline-navy" style="font-size: 0.85rem; padding: 8px 18px;" onclick="openEnquiryModal('MHT-CET State Entrance Prep')">Enquire Program</a>
+            </div>
+          </div>
+        </div>
+        <!-- Course 4 -->
+        <div class="course-card" data-category="nda">
+          <div class="course-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=600&q=80" alt="NDA Foundation Defence" loading="lazy">
+            <span class="course-badge">Defence</span>
+          </div>
+          <div class="course-content">
+            <h3 class="course-title">NDA Foundation - Defence Entry</h3>
+            <p class="course-desc">Dual curriculum targeting both UPSC written exams and physical-interview guidance.</p>
+            <div class="course-features">
+              <div class="course-feat-item"><i class="fa-solid fa-square-check"></i><span>General Ability paper tutoring</span></div>
+              <div class="course-feat-item"><i class="fa-solid fa-square-check"></i><span>English language bootcamps</span></div>
+              <div class="course-feat-item"><i class="fa-solid fa-square-check"></i><span>UPSC Mathematics shortcut keys</span></div>
+            </div>
+            <div class="course-footer">
+              <a href="javascript:void(0)" class="btn btn-outline-navy" style="font-size: 0.85rem; padding: 8px 18px;" onclick="openEnquiryModal('NDA Foundation - Defence Entry')">Enquire Program</a>
+            </div>
+          </div>
+        </div>
+        <!-- Course 5 -->
+        <div class="course-card" data-category="foundation">
+          <div class="course-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=600&q=80" alt="Junior Foundation Course" loading="lazy">
+            <span class="course-badge">School Foundation</span>
+          </div>
+          <div class="course-content">
+            <h3 class="course-title">Foundation Courses (8th-10th)</h3>
+            <p class="course-desc">Strong foundational learning for CBSE & State Boards, Olympiads, and early competitive prep.</p>
+            <div class="course-features">
+              <div class="course-feat-item"><i class="fa-solid fa-square-check"></i><span>NTSE & Olympiad modules</span></div>
+              <div class="course-feat-item"><i class="fa-solid fa-square-check"></i><span>Board exam mock papers</span></div>
+              <div class="course-feat-item"><i class="fa-solid fa-square-check"></i><span>Critical-thinking puzzle labs</span></div>
+            </div>
+            <div class="course-footer">
+              <a href="javascript:void(0)" class="btn btn-outline-navy" style="font-size: 0.85rem; padding: 8px 18px;" onclick="openEnquiryModal('Foundation Courses (8th-10th)')">Enquire Program</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Faculty Section -->
+  <section class="faculty bg-light" id="faculty">
+    <div class="container">
+      <div class="section-title-wrapper">
+        <span class="section-subtitle">Our Mentors</span>
+        <h2 class="section-title">Meet Our Experienced Faculty</h2>
+      </div>
+      <div class="faculty-grid" id="facultyGrid">
+        <div class="faculty-card">
+          <div class="faculty-img-box">
+            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80" alt="Prof. Amit Mishra - Physics" loading="lazy">
+          </div>
+          <div class="faculty-info">
+            <h3 class="faculty-name">Prof. Amit Mishra</h3>
+            <p class="faculty-role">Physics Expert</p>
+            <p class="faculty-qual">M.Tech (VNIT Nagpur) | 8+ Years Exp.</p>
+          </div>
+        </div>
+        <div class="faculty-card">
+          <div class="faculty-img-box">
+            <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=600&q=80" alt="Prof. Rajesh Patil - Mathematics" loading="lazy">
+          </div>
+          <div class="faculty-info">
+            <h3 class="faculty-name">Prof. Rajesh Patil</h3>
+            <p class="faculty-role">Mathematics Mentor</p>
+            <p class="faculty-qual">B.Tech (IIT Bombay) | 12+ Years Exp.</p>
+          </div>
+        </div>
+        <div class="faculty-card">
+          <div class="faculty-img-box">
+            <img src="https://images.unsplash.com/photo-1580894732444-8fecef2271ff?auto=format&fit=crop&w=600&q=80" alt="Dr. Shalini Sharma - Biology & Chemistry" loading="lazy">
+          </div>
+          <div class="faculty-info">
+            <h3 class="faculty-name">Dr. Shalini Sharma</h3>
+            <p class="faculty-role">Biology & Chemistry Head</p>
+            <p class="faculty-qual">Ph.D. in Organic Chemistry | 10+ Years Exp.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Facilities Section -->
+  <section class="facilities" id="facilities">
+    <div class="container">
+      <div class="section-title-wrapper">
+        <span class="section-subtitle">Our Infrastructure</span>
+        <h2 class="section-title">Campus & Facilities</h2>
+      </div>
+      <div class="facilities-grid">
+        <div class="facility-card">
+          <div class="facility-icon-wrap"><i class="fa-solid fa-window-restore"></i></div>
+          <div class="facility-details">
+            <h4>Airy Classrooms</h4>
+            <p>Spacious, well-ventilated, and air-conditioned classrooms designed for complete learning focus.</p>
+          </div>
+        </div>
+        <div class="facility-card">
+          <div class="facility-icon-wrap"><i class="fa-solid fa-desktop"></i></div>
+          <div class="facility-details">
+            <h4>Smart Learning</h4>
+            <p>Modern classrooms integrated with digital smart boards and high-fidelity video tools.</p>
+          </div>
+        </div>
+        <div class="facility-card">
+          <div class="facility-icon-wrap"><i class="fa-solid fa-book-open"></i></div>
+          <div class="facility-details">
+            <h4>Study Material</h4>
+            <p>Exhaustive concept books, daily practice sheets, and question archives structured per topic.</p>
+          </div>
+        </div>
+        <div class="facility-card">
+          <div class="facility-icon-wrap"><i class="fa-solid fa-paste"></i></div>
+          <div class="facility-details">
+            <h4>Test Series</h4>
+            <p>Simulated regular mock patterns matching exact computer-based and offline exam targets.</p>
+          </div>
+        </div>
+        <div class="facility-card">
+          <div class="facility-icon-wrap"><i class="fa-solid fa-question"></i></div>
+          <div class="facility-details">
+            <h4>Doubt Solving Sessions</h4>
+            <p>Exclusive daily timing slots for students to resolve conceptual bottlenecks with faculty.</p>
+          </div>
+        </div>
+        <div class="facility-card">
+          <div class="facility-icon-wrap"><i class="fa-solid fa-user-doctor"></i></div>
+          <div class="facility-details">
+            <h4>Counseling Support</h4>
+            <p>Regular psychological motivation, test anxiety guidance, and structured planning sessions.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="testimonials bg-light" id="testimonials">
+    <div class="container">
+      <div class="section-title-wrapper">
+        <span class="section-subtitle">Success Stories</span>
+        <h2 class="section-title">What Students & Parents Say</h2>
+      </div>
+      
+      <div class="testimonials-slider">
+        <div class="slider-track" id="testimonialTrack">
+          <!-- Slide 1 -->
+          <div class="slide">
+            <div class="testimonial-card">
+              <div class="testimonial-rating">
+                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+              </div>
+              <p class="testimonial-text">"Taj Gurukul provided an amazing platform. The small batch sizes meant that the Physics teachers noticed my mistakes instantly. Mock test analysis helped me improve my pacing."</p>
+              <div class="student-info">
+                <span class="student-name">Rahul Meshram</span>
+                <span class="student-class">JEE Main Selected Aspirant</span>
+              </div>
+            </div>
+          </div>
+          <!-- Slide 2 -->
+          <div class="slide">
+            <div class="testimonial-card">
+              <div class="testimonial-rating">
+                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+              </div>
+              <p class="testimonial-text">"Extremely pleased with the personal tracking system. The directors themselves updated us about our child's test scores, conceptual gaps, and emotional well-being regularly. Very professional."</p>
+              <div class="student-info">
+                <span class="student-name">Dr. Sandeep Deshmukh</span>
+                <span class="student-class">Parent of NEET Batch Student</span>
+              </div>
+            </div>
+          </div>
+          <!-- Slide 3 -->
+          <div class="slide">
+            <div class="testimonial-card">
+              <div class="testimonial-rating">
+                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+              </div>
+              <p class="testimonial-text">"The combination of basic mathematics clearing with general knowledge practice was excellent. Taj Gurukul's environment is highly motivated and competitive."</p>
+              <div class="student-info">
+                <span class="student-name">Alok Dwivedi</span>
+                <span class="student-class">NDA Merit Selected Cadet</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="slider-controls">
+          <button class="slider-arrow" id="prevTestimonial" aria-label="Previous Testimonial"><i class="fa-solid fa-chevron-left"></i></button>
+          <div class="slider-dots" id="testimonialDots"></div>
+          <button class="slider-arrow" id="nextTestimonial" aria-label="Next Testimonial"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery Section -->
+  <section class="gallery" id="gallery">
+    <div class="container">
+      <div class="section-title-wrapper">
+        <span class="section-subtitle">Moments @ Taj Gurukul</span>
+        <h2 class="section-title">Our Campus Gallery</h2>
+      </div>
+      
+      <div class="gallery-filters">
+        <button class="filter-btn active" data-group="all">All Photos</button>
+        <button class="filter-btn" data-group="classroom">Classroom</button>
+        <button class="filter-btn" data-group="events">Events</button>
+        <button class="filter-btn" data-group="seminars">Seminars</button>
+        <button class="filter-btn" data-group="achievements">Achievements</button>
+      </div>
+
+      <div class="gallery-grid" id="galleryGrid">
+        <!-- Image 1 -->
+        <div class="gallery-item" data-group="classroom" onclick="openLightbox('https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=600&q=80', 'Smart Screen Classroom Sessions')">
+          <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=600&q=80" alt="Smart Screen Classroom Sessions" loading="lazy">
+          <div class="gallery-overlay">
+            <span class="gallery-tag">classroom</span>
+            <span class="gallery-title">Smart Screen Classroom Sessions</span>
+          </div>
+        </div>
+        <!-- Image 2 -->
+        <div class="gallery-item" data-group="seminars" onclick="openLightbox('https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=600&q=80', '1-on-1 Student Career Counsel Session')">
+          <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=600&q=80" alt="1-on-1 Student Career Counsel Session" loading="lazy">
+          <div class="gallery-overlay">
+            <span class="gallery-tag">seminars</span>
+            <span class="gallery-title">1-on-1 Student Career Counsel Session</span>
+          </div>
+        </div>
+        <!-- Image 3 -->
+        <div class="gallery-item" data-group="events" onclick="openLightbox('https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=600&q=80', 'Parent Teacher Review Assembly')">
+          <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=600&q=80" alt="Parent Teacher Review Assembly" loading="lazy">
+          <div class="gallery-overlay">
+            <span class="gallery-tag">events</span>
+            <span class="gallery-title">Parent Teacher Review Assembly</span>
+          </div>
+        </div>
+        <!-- Image 4 -->
+        <div class="gallery-item" data-group="achievements" onclick="openLightbox('https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=600&q=80', 'Felicitation Ceremony of Selected Candidates')">
+          <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=600&q=80" alt="Felicitation Ceremony of Selected Candidates" loading="lazy">
+          <div class="gallery-overlay">
+            <span class="gallery-tag">achievements</span>
+            <span class="gallery-title">Felicitation Ceremony of Selected Candidates</span>
+          </div>
+        </div>
+        <!-- Image 5 -->
+        <div class="gallery-item" data-group="classroom" onclick="openLightbox('https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?auto=format&fit=crop&w=600&q=80', 'Interactive Doubt Solving Core Groups')">
+          <img src="https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?auto=format&fit=crop&w=600&q=80" alt="Interactive Doubt Solving Core Groups" loading="lazy">
+          <div class="gallery-overlay">
+            <span class="gallery-tag">classroom</span>
+            <span class="gallery-title">Interactive Doubt Solving Core Groups</span>
+          </div>
+        </div>
+        <!-- Image 6 -->
+        <div class="gallery-item" data-group="events" onclick="openLightbox('https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=600&q=80', 'Cultural Meet & Independence Day')">
+          <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=600&q=80" alt="Cultural Meet & Independence Day" loading="lazy">
+          <div class="gallery-overlay">
+            <span class="gallery-tag">events</span>
+            <span class="gallery-title">Cultural Meet & Independence Day</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lightbox Overlay -->
+  <div class="lightbox" id="galleryLightbox">
+    <div class="lightbox-content">
+      <span class="lightbox-close" id="lightboxClose">&times;</span>
+      <img src="" alt="Zoomed View" id="lightboxImg">
+      <div class="lightbox-caption" id="lightboxCaption"></div>
+    </div>
+  </div>
+
+  <!-- Career Counselling & FAQ Section -->
+  <section class="counseling-faq" id="counseling">
+    <div class="container counseling-grid">
+      <!-- Counselling Form -->
+      <div class="form-wrapper">
+        <h3 class="form-title">Book Free Career Counselling</h3>
+        <p class="form-desc">Get a 1-on-1 mentorship session with our academic experts to chart your entrance exam journey.</p>
+        
+        <form id="counselingForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="studentName">Student Name *</label>
+              <input type="text" id="studentName" class="form-control" placeholder="Enter Full Name" required>
+            </div>
+            <div class="form-group">
+              <label for="studentMobile">Mobile Number *</label>
+              <input type="tel" id="studentMobile" class="form-control" placeholder="10-digit Mobile No." pattern="[0-9]{10}" required>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="studentClass">Current Class/Grade *</label>
+              <select id="studentClass" class="form-control" required>
+                <option value="" disabled selected>Select Current Class</option>
+                <option value="Class 8">Class 8th</option>
+                <option value="Class 9">Class 9th</option>
+                <option value="Class 10">Class 10th</option>
+                <option value="Class 11">Class 11th</option>
+                <option value="Class 12">Class 12th / Repeater</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="examTarget">Target Entrance Exam *</label>
+              <select id="examTarget" class="form-control" required>
+                <option value="" disabled selected>Select Target Exam</option>
+                <option value="NEET">NEET (Medical)</option>
+                <option value="JEE">IIT-JEE (Engineering)</option>
+                <option value="MHT-CET">MHT-CET (State Entrance)</option>
+                <option value="NDA">NDA (Defence Entry)</option>
+                <option value="Foundation">Foundation Course</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="studentMsg">Additional Message / Question (Optional)</label>
+            <textarea id="studentMsg" class="form-control" rows="3" placeholder="Tell us about your learning goals..."></textarea>
+          </div>
+          
+          <button type="submit" class="btn btn-primary" style="width: 100%; border-radius: 6px;">Submit Request</button>
+        </form>
+      </div>
+
+      <!-- FAQ accordions -->
+      <div class="faq-wrapper">
+        <span class="section-subtitle" style="text-align: left; margin-bottom: 5px;">Common Queries</span>
+        <h2 style="font-size: 1.8rem; color: var(--primary-navy); margin-bottom: 25px;">Frequently Asked Questions</h2>
+        
+        <div class="faq-list">
+          <div class="faq-item">
+            <div class="faq-header">
+              <span class="faq-question">What are the qualifications of the teaching staff?</span>
+              <span class="faq-icon"><i class="fa-solid fa-plus"></i></span>
+            </div>
+            <div class="faq-content">
+              <p class="faq-answer">All core subjects (Physics, Chemistry, Maths, Biology) are handled by highly qualified professionals, including B.Tech graduates from premier institutes (like IITs/NITs) and PhD experts, holding at least 8-12 years of coaching experience.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-header">
+              <span class="faq-question">How are student doubts addressed outside the classes?</span>
+              <span class="faq-icon"><i class="fa-solid fa-plus"></i></span>
+            </div>
+            <div class="faq-content">
+              <p class="faq-answer">We schedule dedicated 1-on-1 doubt solving classes daily. Students can sit down directly with subject faculty after classes to work out complicated textbook or assignment problems.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-header">
+              <span class="faq-question">Do you offer boarding/hostel counseling support?</span>
+              <span class="faq-icon"><i class="fa-solid fa-plus"></i></span>
+            </div>
+            <div class="faq-content">
+              <p class="faq-answer">Yes, we provide career counseling, support, and list recommendation of hostels/boarding options for outstation students who travel to Nagpur-Kamptee for study.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-header">
+              <span class="faq-question">What is the standard batch strength at Taj Gurukul?</span>
+              <span class="faq-icon"><i class="fa-solid fa-plus"></i></span>
+            </div>
+            <div class="faq-content">
+              <p class="faq-answer">To maintain high-quality individual feedback, our maximum batch size is capped strictly at 30 students. This makes regular assessment and individual query feedback viable.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact & Google Map Section -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <div class="section-title-wrapper">
+        <span class="section-subtitle">Reach Us</span>
+        <h2 class="section-title">Get In Touch With Taj Gurukul</h2>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-info-cards">
+          <!-- Card 1 -->
+          <div class="contact-info-card">
+            <div class="contact-icon"><i class="fa-solid fa-location-dot"></i></div>
+            <div class="contact-details">
+              <h4>Our Location</h4>
+              <p>Near Shree Ram Mandir Chowk, Modi No. 02, Kamla Nehru School Road, Kamptee, Maharashtra - 441002</p>
+            </div>
+          </div>
+          <!-- Card 2 -->
+          <div class="contact-info-card">
+            <div class="contact-icon"><i class="fa-solid fa-phone-volume"></i></div>
+            <div class="contact-details">
+              <h4>Call Support</h4>
+              <p><a href="tel:+919595972517">+91 95959 72517</a></p>
+              <p><a href="tel:+919552626506">+91 95526 26506</a></p>
+            </div>
+          </div>
+          <!-- Card 3 -->
+          <div class="contact-info-card">
+            <div class="contact-icon"><i class="fa-solid fa-envelope-open-text"></i></div>
+            <div class="contact-details">
+              <h4>Write To Us</h4>
+              <p><a href="mailto:tajgurukul.kamptee@gmail.com">tajgurukul.kamptee@gmail.com</a></p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Google Map Embedding -->
+        <div class="contact-map-wrapper">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3718.572457814983!2d79.198236!3d21.228994!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bd4c0a52dfdb0d3%3A0xe2128509e51c8db6!2sKamptee%2C%20Maharashtra%20441002!5e0!3m2!1sen!2sin!4v1680000000000!5m2!1sen!2sin" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Taj Gurukul Google Map Address"></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer Section -->
+  <footer>
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <div class="logo-wrapper">
+          <a href="#home">
+            <img src="assets/logo.png" alt="Taj Gurukul Logo" style="height: 48px; width: 48px; border-radius: 50%; border: 2px solid var(--white); background-color: var(--white); object-fit: contain; padding: 2px;">
+            <div class="logo-text">
+              <span class="logo-title" style="color: var(--white);">TAJ GURUKUL</span>
+              <span class="logo-tagline">Excellence in Education</span>
+            </div>
+          </a>
+        </div>
+        <p>Taj Gurukul is Nagpur's top academy offering rigorous preparation, individual success tracking systems, and concept-based learning models for NEET, JEE, MHT-CET, and NDA.</p>
+        <div class="footer-socials">
+          <a href="#" class="social-link" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" class="social-link" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
+          <a href="#" class="social-link" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" class="social-link" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+        </div>
+      </div>
+      
+      <div>
+        <h4 class="footer-heading">Quick Links</h4>
+        <ul class="footer-links">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#why-choose">Why Choose Us</a></li>
+          <li><a href="#faculty">Our Faculty</a></li>
+          <li><a href="#gallery">Campus Gallery</a></li>
+          <li><a href="#testimonials">Testimonials</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer-heading">Courses</h4>
+        <ul class="footer-links">
+          <li><a href="#courses" onclick="setCourseFilter('neet')">NEET (UG) Course</a></li>
+          <li><a href="#courses" onclick="setCourseFilter('jee')">IIT-JEE Main/Adv</a></li>
+          <li><a href="#courses" onclick="setCourseFilter('cet')">MHT-CET Prep</a></li>
+          <li><a href="#courses" onclick="setCourseFilter('nda')">NDA Foundation</a></li>
+          <li><a href="#courses" onclick="setCourseFilter('foundation')">Junior Foundation</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer-heading">Support & Info</h4>
+        <div class="footer-contact-item">
+          <i class="fa-solid fa-map-location-dot"></i>
+          <span>Ram Mandir Chowk, Modi No. 02, Kamptee, Maharashtra 441002</span>
+        </div>
+        <div class="footer-contact-item">
+          <i class="fa-solid fa-phone"></i>
+          <span>+91 95959 72517<br>+91 95526 26506</span>
+        </div>
+        <div class="footer-contact-item">
+          <i class="fa-solid fa-envelope"></i>
+          <span>tajgurukul.kamptee@gmail.com</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="container footer-bottom">
+      <p>&copy; 2026 Taj Gurukul. All rights reserved. Managed with excellence in Kamptee, Nagpur.</p>
+      <div class="footer-bottom-links">
+        <a href="#counseling">Career Counselling</a>
+        <a href="admin.html" target="_blank">Admin Login</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Admission Enquiry Modal -->
+  <div class="lightbox" id="enquiryModal">
+    <div class="form-wrapper" style="max-width: 500px; width: 90%; position: relative; margin: auto;">
+      <span class="lightbox-close" id="closeEnquiryModal" style="top: 15px; right: 20px; color: var(--text-dark); position: absolute; font-size: 2.2rem;">&times;</span>
+      <h3 class="form-title" style="margin-top: 10px; font-size: 1.6rem;">Admission Enquiry Form</h3>
+      <p class="form-desc" style="margin-bottom: 20px; font-size: 0.9rem;">Fill in the details below and our counsellor will contact you shortly.</p>
+      
+      <form id="admissionEnquiryForm">
+        <div class="form-group">
+          <label for="enquiryName" style="font-weight: 600; display: block; margin-bottom: 6px; font-size: 0.85rem;">Student Name *</label>
+          <input type="text" id="enquiryName" class="form-control" placeholder="Enter Full Name" required>
+        </div>
+        <div class="form-group">
+          <label for="enquiryMobile" style="font-weight: 600; display: block; margin-bottom: 6px; font-size: 0.85rem;">Mobile Number *</label>
+          <input type="tel" id="enquiryMobile" class="form-control" placeholder="10-digit Mobile No." pattern="[0-9]{10}" required>
+        </div>
+        <div class="form-group">
+          <label for="enquiryCourse" style="font-weight: 600; display: block; margin-bottom: 6px; font-size: 0.85rem;">Course of Interest *</label>
+          <select id="enquiryCourse" class="form-control" required>
+            <option value="" disabled selected>Select Program</option>
+            <option value="NEET (UG)">NEET (UG) - Medical Prep</option>
+            <option value="IIT-JEE">IIT-JEE - Engineering Prep</option>
+            <option value="MHT-CET">MHT-CET - State Entrance</option>
+            <option value="NDA Foundation">NDA Foundation - Defence</option>
+            <option value="Foundation (8th-10th)">Foundation Courses (8th-10th)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="enquiryMsg" style="font-weight: 600; display: block; margin-bottom: 6px; font-size: 0.85rem;">Your Message / Query (Optional)</label>
+          <textarea id="enquiryMsg" class="form-control" rows="3" placeholder="Specify any queries or previous scores..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; border-radius: 6px; padding: 12px;">Submit Enquiry</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Floating Call and WhatsApp widgets -->
+  <div class="floating-widgets">
+    <a href="https://wa.me/919595972517?text=Hi%20Taj%20Gurukul,%20I%20am%20interested%20in%20seeking%20admissions.%20Please%20guide%20me." target="_blank" class="float-btn float-whatsapp" data-tooltip="WhatsApp Support" aria-label="WhatsApp Chat Support">
+      <i class="fa-brands fa-whatsapp"></i>
+    </a>
+    <a href="tel:+919595972517" class="float-btn float-call" data-tooltip="Call Admissions Desk" aria-label="Call admissions office phone">
+      <i class="fa-solid fa-phone"></i>
+    </a>
+  </div>
+
+  <!-- public script -->
+  <script src="app.js"></script>
+</body>
+</html>
