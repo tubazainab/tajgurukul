@@ -211,19 +211,26 @@ async function checkAuth() {
         initDashboard();
       }
     } catch (err) {
-      console.error("Backend Server offline:", err);
-      alert("Backend Server Error. Verify that the server is running on localhost.");
+      console.warn("Backend Server offline, checking offline session:", err);
+      checkOfflineAuthFallback(loginOverlay);
     }
   } else {
-    // Offline mode auth check
-    dbInitOffline();
-    const isLogged = sessionStorage.getItem("tg_logged_in");
-    if (isLogged === "true") {
-      if (loginOverlay) loginOverlay.classList.add("hidden");
-      initDashboard();
-    } else {
-      if (loginOverlay) loginOverlay.classList.remove("hidden");
-    }
+    checkOfflineAuthFallback(loginOverlay);
+  }
+}
+
+function checkOfflineAuthFallback(loginOverlay) {
+  dbInitOffline();
+  const isLogged = sessionStorage.getItem("tg_logged_in");
+  // Also check if they had a backend key but the backend just died
+  const adminKey = sessionStorage.getItem("tg_admin_key");
+  
+  if (isLogged === "true" || adminKey === ADMIN_PASSWORD) {
+    if (loginOverlay) loginOverlay.classList.add("hidden");
+    sessionStorage.setItem("tg_logged_in", "true"); // sync it
+    initDashboard();
+  } else {
+    if (loginOverlay) loginOverlay.classList.remove("hidden");
   }
 }
 
@@ -245,26 +252,39 @@ if (loginForm) {
           if (loginOverlay) loginOverlay.classList.add("hidden");
           document.getElementById("adminPassword").value = "";
           initDashboard();
+        } else if (res.status === 401) {
+          if (errorMsg) {
+            errorMsg.innerText = "Invalid Access Key! Please try again.";
+            errorMsg.style.display = "block";
+          }
         } else {
-          if (errorMsg) errorMsg.style.display = "block";
+          // Backend returned something else (e.g. 404 on Github Pages) - fallback to offline check
+          handleOfflineLoginFallback(enteredPass, errorMsg);
         }
       } catch (err) {
-        alert("Failed to connect to backend server.");
+        console.warn("Backend fetch failed, falling back to offline mode.");
+        handleOfflineLoginFallback(enteredPass, errorMsg);
       }
     } else {
-      // Offline password comparison
-      if (enteredPass === ADMIN_PASSWORD) {
-        sessionStorage.setItem("tg_logged_in", "true");
-        if (errorMsg) errorMsg.style.display = "none";
-        const loginOverlay = document.getElementById("loginOverlay");
-        if (loginOverlay) loginOverlay.classList.add("hidden");
-        document.getElementById("adminPassword").value = "";
-        initDashboard();
-      } else {
-        if (errorMsg) errorMsg.style.display = "block";
-      }
+      handleOfflineLoginFallback(enteredPass, errorMsg);
     }
   });
+}
+
+function handleOfflineLoginFallback(enteredPass, errorMsg) {
+  if (enteredPass === ADMIN_PASSWORD) {
+    sessionStorage.setItem("tg_logged_in", "true");
+    if (errorMsg) errorMsg.style.display = "none";
+    const loginOverlay = document.getElementById("loginOverlay");
+    if (loginOverlay) loginOverlay.classList.add("hidden");
+    document.getElementById("adminPassword").value = "";
+    initDashboard();
+  } else {
+    if (errorMsg) {
+      errorMsg.innerText = "Invalid Access Key! Please try again.";
+      errorMsg.style.display = "block";
+    }
+  }
 }
 
 // Logout btn
