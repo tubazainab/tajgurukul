@@ -2,8 +2,15 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
+const fs = require('fs');
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Ensure uploads directory exists
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir);
+}
 
 // Connect to MongoDB
 const mongoURI = process.env.MONGO_URI || "mongodb://localhost:27017/tajgurukul";
@@ -38,11 +45,32 @@ const facultySchema = new mongoose.Schema({
 });
 const Faculty = mongoose.model('Faculty', facultySchema);
 
+const featureSchema = new mongoose.Schema({
+  id: String, icon: String, title: String, desc: String
+});
+const Feature = mongoose.model('Feature', featureSchema);
+
+const facilitySchema = new mongoose.Schema({
+  id: String, icon: String, title: String, desc: String
+});
+const Facility = mongoose.model('Facility', facilitySchema);
+
 const leadSchema = new mongoose.Schema({
   id: String, type: String, name: String, phone: String, class: String,
   exam: String, course: String, message: String, date: String, status: String
 });
 const Lead = mongoose.model('Lead', leadSchema);
+
+const siteContentSchema = new mongoose.Schema({
+  id: String, heroTagline: String, heroTitle: String, heroDesc: String,
+  heroCardTitle: String, heroCardSubtitle: String, heroCardFeat1: String, heroCardFeat2: String, heroCardFeat3: String, heroCardFeat4: String,
+  statExp: String, statSuccess: String, statMentored: String, statBatch: String,
+  aboutTitle: String, aboutDesc1: String, aboutDesc2: String,
+  infraSubtitle: String, infraTitle: String,
+  contactPhone1: String, contactPhone2: String, contactEmail: String, contactAddress: String,
+  socialFacebook: String, socialTwitter: String, socialInstagram: String, socialYoutube: String
+});
+const SiteContent = mongoose.model('SiteContent', siteContentSchema);
 
 // MOCK DATA SEEDING
 async function seedDb() {
@@ -84,10 +112,65 @@ async function seedDb() {
     { id: "fac_2", name: "Prof. Rajesh Patil", role: "Mathematics Mentor", qual: "B.Tech (IIT Bombay) | 12+ Years Exp.", img: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=600&q=80" },
     { id: "fac_3", name: "Dr. Shalini Sharma", role: "Biology & Chemistry Head", qual: "Ph.D. in Organic Chemistry | 10+ Years Exp.", img: "https://images.unsplash.com/photo-1580894732444-8fecef2271ff?auto=format&fit=crop&w=600&q=80" }
   ]);
+
+  const featCount = await Feature.countDocuments();
+  if (featCount === 0) {
+    await Feature.insertMany([
+      { id: "feat_1", icon: "fa-graduation-cap", title: "Experienced Faculty", desc: "Learn from subject-matter experts who understand core concepts and exam dynamics." },
+      { id: "feat_2", icon: "fa-user-tie", title: "Personalized Mentorship", desc: "Individual mentors guide students on preparation strategy, timeline, and exam temperament." },
+      { id: "feat_3", icon: "fa-people-group", title: "Small Batch Sizes", desc: "Limited seats per classroom to encourage robust engagement and ensure focused tracking." },
+      { id: "feat_4", icon: "fa-file-signature", title: "Regular Mock Tests", desc: "Bi-weekly mock tests designed in full compliance with the latest NEET, JEE, and NDA syllabus." },
+      { id: "feat_5", icon: "fa-lightbulb", title: "Doubt Solving Sessions", desc: "Daily dedicated hours for clear individual doubt resolution with specialized faculty." },
+      { id: "feat_6", icon: "fa-compass", title: "Career Guidance", desc: "Expert-led counseling sessions to help students find suitable goals and college choices." },
+      { id: "feat_7", icon: "fa-chart-line", title: "Performance Tracking", desc: "Continuous monitoring of mock marks and progress reports for optimal performance." },
+      { id: "feat_8", icon: "fa-handshake", title: "Parent-Teacher Interaction", desc: "Regular reviews to keep parents updated about their child's attendance and academic progress." },
+      { id: "feat_9", icon: "fa-brain", title: "Concept-Based Learning", desc: "Ditching standard rote memory techniques for an immersive, practical visualization of subjects." }
+    ]);
+  }
+
+  const facCount = await Facility.countDocuments();
+  if (facCount === 0) {
+    await Facility.insertMany([
+      { id: "facil_1", icon: "fa-chalkboard", title: "Airy Classrooms", desc: "Spacious, well-ventilated, and air-conditioned classrooms designed for complete learning focus." },
+      { id: "facil_2", icon: "fa-computer", title: "Smart Learning", desc: "Modern classrooms integrated with digital smart boards and high-fidelity video tools." },
+      { id: "facil_3", icon: "fa-book-open", title: "Study Material", desc: "Exhaustive concept books, daily practice sheets, and question archives structured per topic." },
+      { id: "facil_4", icon: "fa-file-lines", title: "Test Series", desc: "Simulated regular mock patterns matching exact computer-based and offline exam targets." },
+      { id: "facil_5", icon: "fa-circle-question", title: "Doubt Solving Sessions", desc: "Exclusive daily timing slots for students to resolve conceptual bottlenecks with faculty." },
+      { id: "facil_6", icon: "fa-user-doctor", title: "Counseling Support", desc: "Regular psychological motivation, test anxiety guidance, and structured planning sessions." }
+    ]);
+  }
+
+  const siteCount = await SiteContent.countDocuments();
+  if (siteCount === 0) {
+    await new SiteContent({
+      id: "site_content",
+      heroTagline: "Welcome to Taj Gurukul",
+      heroTitle: "Shape Your Future with Expert Guidance",
+      heroDesc: "Taj Gurukul is a premier coaching institute in Kamptee, Nagpur, providing quality education and personalized mentorship for NEET, JEE, MHT-CET, NDA, and Foundation Courses.",
+      heroCardTitle: "Super-30 Batch Admission", heroCardSubtitle: "Prepare under individual tracking system",
+      heroCardFeat1: "Highly Experienced Mentors", heroCardFeat2: "Limited Batch Sizes (Max 30 Students)",
+      heroCardFeat3: "Comprehensive Study Material", heroCardFeat4: "Weekly Mock Exams & Doubt Clearing",
+      statExp: "15", statSuccess: "95", statMentored: "1500", statBatch: "30",
+      aboutTitle: "Dedicated to Academic Excellence",
+      aboutDesc1: "Taj Gurukul is a leading coaching institute dedicated to helping students achieve success in competitive examinations. With experienced faculty, personalized mentorship, and limited batch sizes, we ensure every student receives individual attention and academic support.",
+      aboutDesc2: "Our concept-based learning methodology bridges the gap between board examinations and national-level competitive tests, equipping aspirants with key problem-solving speed and logical reasoning skills.",
+      infraSubtitle: "OUR INFRASTRUCTURE",
+      infraTitle: "Campus & Facilities",
+      contactPhone1: "+91 95959 72517", contactPhone2: "+91 95526 26506",
+      contactEmail: "tajgurukul.kamptee@gmail.com",
+      contactAddress: "Near Shree Ram Mandir Chowk, Modi No. 02, Kamla Nehru School Road, Kamptee, Maharashtra - 441002",
+      socialFacebook: "https://facebook.com",
+      socialTwitter: "https://twitter.com",
+      socialInstagram: "https://instagram.com",
+      socialYoutube: "https://youtube.com"
+    }).save();
+  }
+
   console.log("Database seeded.");
 }
 
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(express.static(__dirname));
 
 const ADMIN_PASSWORD = "admin@tajgurukul";
@@ -99,6 +182,33 @@ function verifyAdmin(req, res, next) {
     res.status(401).json({ error: "Unauthorized access: Invalid security key" });
   }
 }
+
+app.post('/api/upload', verifyAdmin, async (req, res) => {
+  try {
+    const { imageBase64 } = req.body;
+    if (!imageBase64) return res.status(400).json({ error: "No image provided" });
+
+    const matches = imageBase64.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+    if (!matches || matches.length !== 3) {
+      return res.status(400).json({ error: "Invalid base64 format" });
+    }
+
+    // Attempt to parse extension from mime type
+    let ext = matches[1].split('/')[1] || 'png';
+    if (ext === 'jpeg') ext = 'jpg';
+
+    const buffer = Buffer.from(matches[2], 'base64');
+    const filename = `img_${Date.now()}_${Math.floor(Math.random() * 1000)}.${ext}`;
+    const filepath = path.join(uploadsDir, filename);
+
+    fs.writeFileSync(filepath, buffer);
+
+    res.json({ url: `/uploads/${filename}` });
+  } catch (error) {
+    console.error("Upload error:", error);
+    res.status(500).json({ error: "Failed to process image upload" });
+  }
+});
 
 // --- COURSES ---
 app.get('/api/courses', async (req, res) => {
@@ -251,6 +361,47 @@ app.delete('/api/leads/:id', verifyAdmin, async (req, res) => {
   const deleted = await Lead.findOneAndDelete({ id: req.params.id });
   if (!deleted) return res.status(404).json({ error: "Not found" });
   res.json({ success: true });
+});
+
+// --- WHY CHOOSE US FEATURES ---
+app.get('/api/features', async (req, res) => {
+  const features = await Feature.find({});
+  res.json(features);
+});
+app.post('/api/features', verifyAdmin, async (req, res) => {
+  const newFeature = new Feature(req.body);
+  await newFeature.save();
+  res.json({ success: true });
+});
+app.delete('/api/features/:id', verifyAdmin, async (req, res) => {
+  await Feature.deleteOne({ id: req.params.id });
+  res.json({ success: true });
+});
+
+// --- FACILITIES ---
+app.get('/api/facilities', async (req, res) => {
+  const facilities = await Facility.find({});
+  res.json(facilities);
+});
+app.post('/api/facilities', verifyAdmin, async (req, res) => {
+  const newFacility = new Facility(req.body);
+  await newFacility.save();
+  res.json({ success: true });
+});
+app.delete('/api/facilities/:id', verifyAdmin, async (req, res) => {
+  await Facility.deleteOne({ id: req.params.id });
+  res.json({ success: true });
+});
+
+// --- SITE CONTENT ---
+app.get('/api/content', async (req, res) => {
+  const content = await SiteContent.findOne({ id: "site_content" });
+  res.json(content || {});
+});
+
+app.put('/api/content', verifyAdmin, async (req, res) => {
+  const updated = await SiteContent.findOneAndUpdate({ id: "site_content" }, req.body, { new: true, upsert: true });
+  res.json(updated);
 });
 
 app.listen(PORT, () => {

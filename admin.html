@@ -9,6 +9,8 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="admin.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Quill CSS -->
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 </head>
 <body class="admin-body">
 
@@ -66,6 +68,15 @@
       </a>
       <a href="#faculty" class="admin-nav-item" data-tab="faculty">
         <i class="fa-solid fa-graduation-cap"></i> Manage Faculty
+      </a>
+      <a href="#sitecontent" class="admin-nav-item" data-tab="sitecontent">
+        <i class="fa-solid fa-pen-to-square"></i> Site Content
+      </a>
+      <a href="#features" class="admin-nav-item" data-tab="features">
+        <i class="fa-solid fa-list-check"></i> Why Choose Us
+      </a>
+      <a href="#facilities" class="admin-nav-item" data-tab="facilities">
+        <i class="fa-solid fa-building"></i> Manage Facilities
       </a>
     </nav>
     
@@ -285,13 +296,23 @@
               <input type="text" id="newCourseBadge" class="form-control" placeholder="e.g. NEET 2027" required>
             </div>
             <div class="form-group">
-              <label for="newCourseImg">Unsplash Photo / URL *</label>
-              <input type="url" id="newCourseImg" class="form-control" placeholder="https://images.unsplash.com/photo-..." required>
+              <label for="newCourseImg" style="display: flex; justify-content: space-between;">
+                <span>Course Image / Photo *</span>
+                <a href="#" class="browse-gallery-btn" data-target="newCourseImg" style="font-size: 0.8rem; color: #3b82f6; font-weight: normal; text-decoration: underline;"><i class="fa-solid fa-images"></i> Browse Gallery</a>
+              </label>
+              <div class="upload-drop-zone" id="dropZoneCourse">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+                <p>Drag & Drop image here</p>
+                <span class="sub-text">or click to upload from local storage</span>
+                <input type="file" id="fileInputCourse" accept="image/*" style="display: none;">
+                <input type="hidden" id="newCourseImg" required>
+                <img id="previewCourse" class="preview-img" style="display: none;">
+              </div>
             </div>
           </div>
           <div class="form-group">
-            <label for="newCourseDesc">Short Description *</label>
-            <textarea id="newCourseDesc" class="form-control" rows="2" placeholder="Brief outline of the course structure..." required></textarea>
+            <label for="newCourseDescEditor">Short Description *</label>
+            <div id="newCourseDescEditor" style="background: white; min-height: 100px;"></div>
           </div>
           <div class="form-row">
             <div class="form-group">
@@ -356,8 +377,8 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="newTestText">Review Message Content *</label>
-            <textarea id="newTestText" class="form-control" rows="3" placeholder="Paste the feedback comments here..." required></textarea>
+            <label for="newTestTextEditor">Review Message Content *</label>
+            <div id="newTestTextEditor" style="background: white; min-height: 100px;"></div>
           </div>
           <button type="submit" class="btn btn-primary" style="border-radius: 6px; padding:12px 30px;">Add Testimonial</button>
         </form>
@@ -398,17 +419,25 @@
             </div>
             <div class="form-group">
               <label for="newGalGroup">Image Album Folder *</label>
-              <select id="newGalGroup" class="form-control" required>
-                <option value="classroom">Classroom</option>
-                <option value="events">Events</option>
-                <option value="seminars">Seminars</option>
-                <option value="achievements">Achievements</option>
-              </select>
+              <input type="text" id="newGalGroup" list="galleryFoldersList" class="form-control" placeholder="Select or type a new folder" required>
+              <datalist id="galleryFoldersList">
+                <option value="Classroom"></option>
+                <option value="Events"></option>
+                <option value="Seminars"></option>
+                <option value="Achievements"></option>
+              </datalist>
             </div>
           </div>
           <div class="form-group">
-            <label for="newGalUrl">Image Web Link / URL *</label>
-            <input type="url" id="newGalUrl" class="form-control" placeholder="https://images.unsplash.com/photo-..." required>
+            <label for="newGalUrl">Gallery Image *</label>
+            <div class="upload-drop-zone" id="dropZoneGal">
+              <i class="fa-solid fa-cloud-arrow-up"></i>
+              <p>Drag & Drop image here</p>
+              <span class="sub-text">or click to upload from local storage</span>
+              <input type="file" id="fileInputGal" accept="image/*" style="display: none;">
+              <input type="hidden" id="newGalUrl" required>
+              <img id="previewGal" class="preview-img" style="display: none;">
+            </div>
           </div>
           <button type="submit" class="btn btn-primary" style="border-radius: 6px; padding:12px 30px;">Link Picture</button>
         </form>
@@ -490,8 +519,18 @@
               <input type="text" id="newFacQual" class="form-control" placeholder="e.g. Ph.D. (VNIT) | 10+ Years Exp." required>
             </div>
             <div class="form-group">
-              <label for="newFacImg">Profile Image URL *</label>
-              <input type="url" id="newFacImg" class="form-control" placeholder="https://images.unsplash.com/photo-..." required>
+              <label for="newFacImg" style="display: flex; justify-content: space-between;">
+                <span>Profile Image / Photo *</span>
+                <a href="#" class="browse-gallery-btn" data-target="newFacImg" style="font-size: 0.8rem; color: #3b82f6; font-weight: normal; text-decoration: underline;"><i class="fa-solid fa-images"></i> Browse Gallery</a>
+              </label>
+              <div class="upload-drop-zone" id="dropZoneFac">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+                <p>Drag & Drop image here</p>
+                <span class="sub-text">or click to upload from local storage</span>
+                <input type="file" id="fileInputFac" accept="image/*" style="display: none;">
+                <input type="hidden" id="newFacImg" required>
+                <img id="previewFac" class="preview-img" style="display: none;">
+              </div>
             </div>
           </div>
           <button type="submit" class="btn btn-primary" style="border-radius: 6px; padding:12px 30px;">Add Faculty Member</button>
@@ -521,9 +560,204 @@
       </div>
     </section>
 
+    <!-- TAB 9: Site Content CMS -->
+    <section id="tab-sitecontent" class="admin-section">
+      <div class="form-card">
+        <h3>Edit Full Website Content</h3>
+        <form id="siteContentForm">
+          <h4>Hero Section</h4>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Hero Tagline</label>
+              <input type="text" id="heroTagline" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label>Hero Title</label>
+              <input type="text" id="heroTitle" class="form-control" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Hero Description</label>
+            <textarea id="heroDesc" class="form-control" rows="2" required></textarea>
+          </div>
+          
+          <h4 style="margin-top:20px; font-size: 1.1rem;">Hero Card (Super-30 Admission)</h4>
+          <div class="form-row">
+            <div class="form-group"><label>Card Title</label><input type="text" id="heroCardTitle" class="form-control" required></div>
+            <div class="form-group"><label>Card Subtitle</label><input type="text" id="heroCardSubtitle" class="form-control" required></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Feature 1</label><input type="text" id="heroCardFeat1" class="form-control" required></div>
+            <div class="form-group"><label>Feature 2</label><input type="text" id="heroCardFeat2" class="form-control" required></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Feature 3</label><input type="text" id="heroCardFeat3" class="form-control" required></div>
+            <div class="form-group"><label>Feature 4</label><input type="text" id="heroCardFeat4" class="form-control" required></div>
+          </div>
+          
+          <hr style="margin:20px 0; border:0; border-top:1px solid #ddd;">
+          <h4>Infrastructure Section</h4>
+          <div class="form-row">
+            <div class="form-group"><label>Section Subtitle</label><input type="text" id="infraSubtitle" class="form-control" required></div>
+            <div class="form-group"><label>Section Title</label><input type="text" id="infraTitle" class="form-control" required></div>
+          </div>
+          
+          <hr style="margin:20px 0; border:0; border-top:1px solid #ddd;">
+          <h4>Statistics</h4>
+          <div class="form-row">
+            <div class="form-group"><label>Years of Experience</label><input type="text" id="statExp" class="form-control"></div>
+            <div class="form-group"><label>Success %</label><input type="text" id="statSuccess" class="form-control"></div>
+            <div class="form-group"><label>Mentored Students</label><input type="text" id="statMentored" class="form-control"></div>
+            <div class="form-group"><label>Max Batch Size</label><input type="text" id="statBatch" class="form-control"></div>
+          </div>
+          
+          <hr style="margin:20px 0; border:0; border-top:1px solid #ddd;">
+          <h4>About Section</h4>
+          <div class="form-group">
+            <label>About Title</label>
+            <input type="text" id="aboutTitle" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label>About Description Paragraph 1</label>
+            <textarea id="aboutDesc1" class="form-control" rows="3" required></textarea>
+          </div>
+          <div class="form-group">
+            <label>About Description Paragraph 2</label>
+            <textarea id="aboutDesc2" class="form-control" rows="3" required></textarea>
+          </div>
+          
+          <hr style="margin:20px 0; border:0; border-top:1px solid #ddd;">
+          <h4>Contact Info</h4>
+          <div class="form-row">
+            <div class="form-group"><label>Primary Phone</label><input type="text" id="contactPhone1" class="form-control"></div>
+            <div class="form-group"><label>Secondary Phone</label><input type="text" id="contactPhone2" class="form-control"></div>
+          </div>
+          <div class="form-group"><label>Email</label><input type="email" id="contactEmail" class="form-control"></div>
+          <div class="form-group"><label>Address</label><textarea id="contactAddress" class="form-control" rows="2"></textarea></div>
+
+          <hr style="margin:20px 0; border:0; border-top:1px solid #ddd;">
+          <h4>Social Media Links</h4>
+          <div class="form-row">
+            <div class="form-group"><label>Facebook URL</label><input type="url" id="socialFacebook" class="form-control" placeholder="https://facebook.com/..."></div>
+            <div class="form-group"><label>Twitter URL</label><input type="url" id="socialTwitter" class="form-control" placeholder="https://twitter.com/..."></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Instagram URL</label><input type="url" id="socialInstagram" class="form-control" placeholder="https://instagram.com/..."></div>
+            <div class="form-group"><label>YouTube URL</label><input type="url" id="socialYoutube" class="form-control" placeholder="https://youtube.com/..."></div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="border-radius: 6px; padding:12px 30px; margin-top:20px;">Save Site Content</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- TAB 10: Features -->
+    <section id="tab-features" class="admin-section">
+      <div class="form-card">
+        <h3>Add New Feature</h3>
+        <form id="addFeatureForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="newFeatTitle">Feature Title *</label>
+              <input type="text" id="newFeatTitle" class="form-control" placeholder="e.g. Experienced Faculty" required>
+            </div>
+            <div class="form-group">
+              <label for="newFeatIcon">FontAwesome Icon Class *</label>
+              <input type="text" id="newFeatIcon" class="form-control" placeholder="e.g. fa-graduation-cap" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="newFeatDesc">Description *</label>
+            <textarea id="newFeatDesc" class="form-control" rows="2" placeholder="Learn from subject-matter experts..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" style="border-radius: 6px; padding:12px 30px;">Add Feature</button>
+        </form>
+      </div>
+
+      <div class="table-card">
+        <div class="table-header">
+          <h3>Why Choose Us Features</h3>
+        </div>
+        <div class="table-responsive">
+          <table id="adminFeaturesTable">
+            <thead>
+              <tr>
+                <th>Icon</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Feature items -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 11: Facilities -->
+    <section id="tab-facilities" class="admin-section">
+      <div class="form-card">
+        <h3>Add New Facility</h3>
+        <form id="addFacilityForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="newFacilTitle">Facility Title *</label>
+              <input type="text" id="newFacilTitle" class="form-control" placeholder="e.g. Smart Learning" required>
+            </div>
+            <div class="form-group">
+              <label for="newFacilIcon">FontAwesome Icon Class *</label>
+              <input type="text" id="newFacilIcon" class="form-control" placeholder="e.g. fa-computer" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="newFacilDesc">Description *</label>
+            <textarea id="newFacilDesc" class="form-control" rows="2" placeholder="Modern classrooms integrated with..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" style="border-radius: 6px; padding:12px 30px;">Add Facility</button>
+        </form>
+      </div>
+
+      <div class="table-card">
+        <div class="table-header">
+          <h3>Campus & Facilities</h3>
+        </div>
+        <div class="table-responsive">
+          <table id="adminFacilitiesTable">
+            <thead>
+              <tr>
+                <th>Icon</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Facility items -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <!-- admin core script -->
+  <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
   <script src="admin.js"></script>
+  <!-- Gallery Browser Modal -->
+  <div class="modal-overlay hidden" id="galleryBrowserModal">
+    <div class="modal-content" style="max-width: 800px; max-height: 85vh; display: flex; flex-direction: column;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--admin-border); padding-bottom: 10px;">
+        <h3 style="color: var(--admin-primary); font-size: 1.25rem;">Select Image from Gallery</h3>
+        <button id="closeGalleryBrowserBtn" style="font-size: 1.5rem; color: var(--admin-text-muted); cursor: pointer; border: none; background: transparent;">&times;</button>
+      </div>
+      <div id="galleryBrowserGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; overflow-y: auto; padding-right: 10px; max-height: 60vh;">
+        <!-- Images injected dynamically -->
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>

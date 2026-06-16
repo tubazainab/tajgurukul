@@ -590,6 +590,70 @@ textarea.form-control {
   resize: vertical;
 }
 
+/* Drag and Drop Upload Zone */
+.upload-drop-zone {
+  border: 2px dashed var(--admin-border);
+  border-radius: 8px;
+  padding: 30px;
+  text-align: center;
+  background: var(--admin-main-bg);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.upload-drop-zone.dragover {
+  border-color: var(--admin-info);
+  background: rgba(59, 130, 246, 0.05);
+}
+
+.upload-drop-zone i.fa-cloud-arrow-up {
+  font-size: 2rem;
+  color: var(--admin-text-muted);
+  margin-bottom: 10px;
+  display: block;
+}
+
+.upload-drop-zone p {
+  margin: 0 0 5px 0;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--admin-text-main);
+}
+
+.upload-drop-zone span.sub-text {
+  font-size: 0.8rem;
+  color: var(--admin-text-muted);
+}
+
+.upload-drop-zone img.preview-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #fff;
+  z-index: 10;
+}
+
+.upload-drop-zone.uploading::after {
+  content: "Uploading...";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: var(--admin-primary);
+  z-index: 20;
+}
+
 /* Button override inside admin main */
 .admin-main .btn-primary {
   background-color: var(--admin-accent);
@@ -664,4 +728,38 @@ textarea.form-control {
   th, td {
     padding: 12px 14px;
   }
+}
+
+/* ==========================================================================
+   8. Modals & Overlays
+   ========================================================================== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(10, 25, 47, 0.85);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  transition: opacity 0.3s ease;
+}
+
+.modal-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.modal-content {
+  background: var(--admin-card-bg);
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transform: translateY(0);
+  transition: transform 0.3s ease;
 }

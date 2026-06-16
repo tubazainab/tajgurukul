@@ -20,8 +20,8 @@
   <div class="top-bar">
     <div class="container top-bar-container">
       <div class="top-bar-info">
-        <a href="tel:+919595972517"><i class="fa-solid fa-phone"></i> +91 95959 72517</a>
-        <a href="mailto:tajgurukul.kamptee@gmail.com"><i class="fa-solid fa-envelope"></i> tajgurukul.kamptee@gmail.com</a>
+        <a href="tel:+919595972517" id="topPhoneDisp"><i class="fa-solid fa-phone"></i> +91 95959 72517</a>
+        <a href="mailto:tajgurukul.kamptee@gmail.com" id="topEmailDisp"><i class="fa-solid fa-envelope"></i> tajgurukul.kamptee@gmail.com</a>
       </div>
       <div class="announcement-ticker">
         <div class="ticker-wrap" id="announcementsMarquee">
@@ -30,9 +30,7 @@
           <span class="ticker-item"><i class="fa-solid fa-graduation-cap"></i> Congratulating our board toppers on amazing academic scores!</span>
         </div>
       </div>
-      <div class="top-bar-admin">
-        <a href="admin.html" target="_blank"><i class="fa-solid fa-lock-open"></i> Admin Portal</a>
-      </div>
+
     </div>
   </div>
 
@@ -76,9 +74,9 @@
   <section class="hero" id="home">
     <div class="container hero-grid">
       <div class="hero-content">
-        <span class="hero-tagline">Welcome to Taj Gurukul</span>
-        <h1 class="hero-title">Shape Your <span>Future</span> with Expert Guidance</h1>
-        <p class="hero-desc">
+        <span class="hero-tagline" id="heroTaglineDisp">Welcome to Taj Gurukul</span>
+        <h1 class="hero-title" id="heroTitleDisp">Shape Your <span>Future</span> with Expert Guidance</h1>
+        <p class="hero-desc" id="heroDescDisp">
           Taj Gurukul is a premier coaching institute in Kamptee, Nagpur, providing quality education and personalized mentorship for NEET, JEE, MHT-CET, NDA, and Foundation Courses.
         </p>
         <div class="hero-buttons">
@@ -89,24 +87,24 @@
       <div class="hero-image-wrapper">
         <div class="hero-glow-circle"></div>
         <div class="hero-card">
-          <h3>Super-30 Batch Admission</h3>
-          <p>Prepare under individual tracking system</p>
+          <h3 id="heroCardTitleDisp">Super-30 Batch Admission</h3>
+          <p id="heroCardSubtitleDisp">Prepare under individual tracking system</p>
           <div class="hero-features-list">
             <div class="hero-feature-item">
               <i class="fa-solid fa-circle-check"></i>
-              <span>Highly Experienced Mentors</span>
+              <span id="heroCardFeat1Disp">Highly Experienced Mentors</span>
             </div>
             <div class="hero-feature-item">
               <i class="fa-solid fa-circle-check"></i>
-              <span>Limited Batch Sizes (Max 30 Students)</span>
+              <span id="heroCardFeat2Disp">Limited Batch Sizes (Max 30 Students)</span>
             </div>
             <div class="hero-feature-item">
               <i class="fa-solid fa-circle-check"></i>
-              <span>Comprehensive Study Material</span>
+              <span id="heroCardFeat3Disp">Comprehensive Study Material</span>
             </div>
             <div class="hero-feature-item">
               <i class="fa-solid fa-circle-check"></i>
-              <span>Weekly Mock Exams & Doubt Clearing</span>
+              <span id="heroCardFeat4Disp">Weekly Mock Exams & Doubt Clearing</span>
             </div>
           </div>
           <a href="#counseling" class="btn btn-primary" style="margin-top: 25px; width: 100%;">Apply Online</a>
@@ -120,19 +118,19 @@
     <div class="container">
       <div class="stats-grid">
         <div class="stat-item">
-          <div class="stat-number" data-target="15">0</div>
+          <div class="stat-number" data-target="15" id="statExpDisp">0</div>
           <div class="stat-label">Years of Experience</div>
         </div>
         <div class="stat-item">
-          <div class="stat-number" data-target="95">0</div>
+          <div class="stat-number" data-target="95" id="statSuccessDisp">0</div>
           <div class="stat-label">NEET/JEE Success %</div>
         </div>
         <div class="stat-item">
-          <div class="stat-number" data-target="1500">0</div>
+          <div class="stat-number" data-target="1500" id="statMentoredDisp">0</div>
           <div class="stat-label">Mentored Students</div>
         </div>
         <div class="stat-item">
-          <div class="stat-number" data-target="30">0</div>
+          <div class="stat-number" data-target="30" id="statBatchDisp">0</div>
           <div class="stat-label">Max Batch Size</div>
         </div>
       </div>
@@ -147,11 +145,11 @@
       </div>
       <div class="about-text">
         <span class="section-subtitle">About Our Institute</span>
-        <h2 class="about-desc-title" style="font-size: 2.2rem; color: var(--primary-navy); margin-bottom: 20px;">Dedicated to Academic Excellence</h2>
-        <p class="about-desc">
+        <h2 class="about-desc-title" id="aboutTitleDisp" style="font-size: 2.2rem; color: var(--primary-navy); margin-bottom: 20px;">Dedicated to Academic Excellence</h2>
+        <p class="about-desc" id="aboutDesc1Disp">
           Taj Gurukul is a leading coaching institute dedicated to helping students achieve success in competitive examinations. With experienced faculty, personalized mentorship, and limited batch sizes, we ensure every student receives individual attention and academic support.
         </p>
-        <p class="about-desc" style="margin-bottom: 30px;">
+        <p class="about-desc" id="aboutDesc2Disp" style="margin-bottom: 30px;">
           Our concept-based learning methodology bridges the gap between board examinations and national-level competitive tests, equipping aspirants with key problem-solving speed and logical reasoning skills.
         </p>
         <a href="#courses" class="btn btn-outline-navy">Explore Courses</a>
@@ -166,7 +164,7 @@
         <span class="section-subtitle">Our Features</span>
         <h2 class="section-title">Why Choose Taj Gurukul?</h2>
       </div>
-      <div class="why-choose-grid">
+      <div class="why-choose-grid" id="whyChooseGrid">
         <!-- Grid Item 1 -->
         <div class="why-card">
           <div class="why-icon"><i class="fa-solid fa-graduation-cap"></i></div>
@@ -221,6 +219,20 @@
           <h4>Concept-Based Learning</h4>
           <p>Ditching standard rote memory techniques for an immersive, practical visualization of subjects.</p>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Campus & Facilities Section -->
+  <section class="facilities" id="facilities" style="padding: 80px 0; background-color: var(--bg-color);">
+    <div class="container">
+      <div class="section-title-wrapper" style="text-align: center; margin-bottom: 50px;">
+        <span class="section-subtitle" id="infraSubtitleDisp" style="color: var(--primary-red); letter-spacing: 2px; text-transform: uppercase; font-size: 0.9rem; font-weight: 700; display: block; margin-bottom: 5px;">OUR INFRASTRUCTURE</span>
+        <h2 class="section-title" id="infraTitleDisp" style="color: var(--primary-navy); font-size: 2.5rem; margin-top: 0; margin-bottom: 15px; font-weight: 800;">Campus & Facilities</h2>
+        <div style="width: 50px; height: 3px; background-color: var(--primary-red); margin: 0 auto;"></div>
+      </div>
+      <div class="facilities-grid" id="facilitiesGrid">
+        <!-- Facilities will be injected here -->
       </div>
     </div>
   </section>
@@ -736,10 +748,10 @@
         </div>
         <p>Taj Gurukul is Nagpur's top academy offering rigorous preparation, individual success tracking systems, and concept-based learning models for NEET, JEE, MHT-CET, and NDA.</p>
         <div class="footer-socials">
-          <a href="#" class="social-link" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-          <a href="#" class="social-link" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
-          <a href="#" class="social-link" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-          <a href="#" class="social-link" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+          <a href="#" class="social-link" aria-label="Facebook" id="socialFacebookDisp"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" class="social-link" aria-label="Twitter" id="socialTwitterDisp"><i class="fa-brands fa-twitter"></i></a>
+          <a href="#" class="social-link" aria-label="Instagram" id="socialInstagramDisp"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" class="social-link" aria-label="YouTube" id="socialYoutubeDisp"><i class="fa-brands fa-youtube"></i></a>
         </div>
       </div>
       
@@ -770,15 +782,15 @@
         <h4 class="footer-heading">Support & Info</h4>
         <div class="footer-contact-item">
           <i class="fa-solid fa-map-location-dot"></i>
-          <span>Ram Mandir Chowk, Modi No. 02, Kamptee, Maharashtra 441002</span>
+          <span id="footerAddressDisp">Ram Mandir Chowk, Modi No. 02, Kamptee, Maharashtra 441002</span>
         </div>
         <div class="footer-contact-item">
           <i class="fa-solid fa-phone"></i>
-          <span>+91 95959 72517<br>+91 95526 26506</span>
+          <span id="footerPhoneDisp">+91 95959 72517<br>+91 95526 26506</span>
         </div>
         <div class="footer-contact-item">
           <i class="fa-solid fa-envelope"></i>
-          <span>tajgurukul.kamptee@gmail.com</span>
+          <span id="footerEmailDisp">tajgurukul.kamptee@gmail.com</span>
         </div>
       </div>
     </div>
@@ -787,7 +799,7 @@
       <p>&copy; 2026 Taj Gurukul. All rights reserved. Managed with excellence in Kamptee, Nagpur.</p>
       <div class="footer-bottom-links">
         <a href="#counseling">Career Counselling</a>
-        <a href="admin.html" target="_blank">Admin Login</a>
+
       </div>
     </div>
   </footer>

@@ -5,6 +5,16 @@
 const isBackendActive = window.location.protocol.startsWith('http') && !window.location.search.includes('offline=true');
 const ADMIN_PASSWORD = "admin@tajgurukul";
 
+let quillCourseDesc, quillTestText;
+document.addEventListener("DOMContentLoaded", () => {
+  if (document.getElementById("newCourseDescEditor")) {
+    quillCourseDesc = new Quill('#newCourseDescEditor', { theme: 'snow', placeholder: 'Brief outline of the course structure...' });
+  }
+  if (document.getElementById("newTestTextEditor")) {
+    quillTestText = new Quill('#newTestTextEditor', { theme: 'snow', placeholder: 'Paste the feedback comments here...' });
+  }
+});
+
 // Default Mock Data for Offline fallbacks
 const DEFAULT_COURSES = [
   {
@@ -117,6 +127,37 @@ const DEFAULT_FACULTY = [
   }
 ];
 
+const DEFAULT_SITECONTENT = {
+  heroTagline: "Welcome to Taj Gurukul", heroTitle: "Shape Your Future with Expert Guidance", heroDesc: "Taj Gurukul is a premier coaching institute in Kamptee, Nagpur, providing quality education and personalized mentorship for NEET, JEE, MHT-CET, NDA, and Foundation Courses.",
+  heroCardTitle: "Super-30 Batch Admission", heroCardSubtitle: "Prepare under individual tracking system",
+  heroCardFeat1: "Highly Experienced Mentors", heroCardFeat2: "Limited Batch Sizes (Max 30 Students)",
+  heroCardFeat3: "Comprehensive Study Material", heroCardFeat4: "Weekly Mock Exams & Doubt Clearing",
+  statExp: "15", statSuccess: "95", statMentored: "1500", statBatch: "30",
+  aboutTitle: "Dedicated to Academic Excellence", aboutDesc1: "Taj Gurukul is a leading coaching institute dedicated to helping students achieve success in competitive examinations. With experienced faculty, personalized mentorship, and limited batch sizes, we ensure every student receives individual attention and academic support.", aboutDesc2: "Our concept-based learning methodology bridges the gap between board examinations and national-level competitive tests, equipping aspirants with key problem-solving speed and logical reasoning skills.",
+  contactPhone1: "+91 95959 72517", contactPhone2: "+91 95526 26506", contactEmail: "tajgurukul.kamptee@gmail.com", contactAddress: "Near Shree Ram Mandir Chowk, Modi No. 02, Kamla Nehru School Road, Kamptee, Maharashtra - 441002"
+};
+
+const DEFAULT_FEATURES = [
+  { id: "feat_1", icon: "fa-graduation-cap", title: "Experienced Faculty", desc: "Learn from subject-matter experts who understand core concepts and exam dynamics." },
+  { id: "feat_2", icon: "fa-user-tie", title: "Personalized Mentorship", desc: "Individual mentors guide students on preparation strategy, timeline, and exam temperament." },
+  { id: "feat_3", icon: "fa-people-group", title: "Small Batch Sizes", desc: "Limited seats per classroom to encourage robust engagement and ensure focused tracking." },
+  { id: "feat_4", icon: "fa-file-signature", title: "Regular Mock Tests", desc: "Bi-weekly mock tests designed in full compliance with the latest NEET, JEE, and NDA syllabus." },
+  { id: "feat_5", icon: "fa-lightbulb", title: "Doubt Solving Sessions", desc: "Daily dedicated hours for clear individual doubt resolution with specialized faculty." },
+  { id: "feat_6", icon: "fa-compass", title: "Career Guidance", desc: "Expert-led counseling sessions to help students find suitable goals and college choices." },
+  { id: "feat_7", icon: "fa-chart-line", title: "Performance Tracking", desc: "Continuous monitoring of mock marks and progress reports for optimal performance." },
+  { id: "feat_8", icon: "fa-handshake", title: "Parent-Teacher Interaction", desc: "Regular reviews to keep parents updated about their child's attendance and academic progress." },
+  { id: "feat_9", icon: "fa-brain", title: "Concept-Based Learning", desc: "Ditching standard rote memory techniques for an immersive, practical visualization of subjects." }
+];
+
+const DEFAULT_FACILITIES = [
+  { id: "facil_1", icon: "fa-chalkboard", title: "Airy Classrooms", desc: "Spacious, well-ventilated, and air-conditioned classrooms designed for complete learning focus." },
+  { id: "facil_2", icon: "fa-computer", title: "Smart Learning", desc: "Modern classrooms integrated with digital smart boards and high-fidelity video tools." },
+  { id: "facil_3", icon: "fa-book-open", title: "Study Material", desc: "Exhaustive concept books, daily practice sheets, and question archives structured per topic." },
+  { id: "facil_4", icon: "fa-file-lines", title: "Test Series", desc: "Simulated regular mock patterns matching exact computer-based and offline exam targets." },
+  { id: "facil_5", icon: "fa-circle-question", title: "Doubt Solving Sessions", desc: "Exclusive daily timing slots for students to resolve conceptual bottlenecks with faculty." },
+  { id: "facil_6", icon: "fa-user-doctor", title: "Counseling Support", desc: "Regular psychological motivation, test anxiety guidance, and structured planning sessions." }
+];
+
 // Offline LocalStorage Database initializer
 function dbInitOffline() {
   if (!localStorage.getItem("tg_courses")) {
@@ -136,6 +177,15 @@ function dbInitOffline() {
   }
   if (!localStorage.getItem("tg_leads")) {
     localStorage.setItem("tg_leads", JSON.stringify([]));
+  }
+  if (!localStorage.getItem("tg_sitecontent")) {
+    localStorage.setItem("tg_sitecontent", JSON.stringify(DEFAULT_SITECONTENT));
+  }
+  if (!localStorage.getItem("tg_features")) {
+    localStorage.setItem("tg_features", JSON.stringify(DEFAULT_FEATURES));
+  }
+  if (!localStorage.getItem("tg_facilities")) {
+    localStorage.setItem("tg_facilities", JSON.stringify(DEFAULT_FACILITIES));
   }
 }
 
@@ -240,7 +290,10 @@ const TAB_DETAILS = {
   testimonials: { title: "Manage Student Testimonials", desc: "Update student success reviews in the homepage slider." },
   gallery: { title: "Manage Campus Gallery", desc: "Link classroom, seminar, events, and student achievement photos." },
   announcements: { title: "Announcements Marquee", desc: "Publish and update floating ticker notifications visible to site visitors." },
-  faculty: { title: "Manage Campus Faculty", desc: "Add, review, or delete active faculty members." }
+  faculty: { title: "Manage Campus Faculty", desc: "Add, review, or delete active faculty members." },
+  sitecontent: { title: "Site Content Settings", desc: "Manage text and contact details across the website." },
+  features: { title: "Manage Features", desc: "Add, review, or delete 'Why Choose Us' features." },
+  facilities: { title: "Manage Facilities", desc: "Add, review, or delete infrastructure facilities." }
 };
 
 function initTabNavigation() {
@@ -289,6 +342,12 @@ function refreshTabContent(tabId) {
     renderAnnouncementsTable();
   } else if (tabId === "faculty") {
     renderFacultyTable();
+  } else if (tabId === "sitecontent") {
+    renderSiteContentSettings();
+  } else if (tabId === "features") {
+    renderFeaturesTable();
+  } else if (tabId === "facilities") {
+    renderFacilitiesTable();
   }
 }
 
@@ -348,6 +407,33 @@ async function getFacultyList() {
     return await res.json();
   } else {
     return JSON.parse(localStorage.getItem("tg_faculty")) || [];
+  }
+}
+
+async function getSiteContentList() {
+  if (isBackendActive) {
+    const res = await fetch('/api/content');
+    return await res.json();
+  } else {
+    return JSON.parse(localStorage.getItem("tg_sitecontent")) || {};
+  }
+}
+
+async function getFeaturesList() {
+  if (isBackendActive) {
+    const res = await fetch('/api/features');
+    return await res.json();
+  } else {
+    return JSON.parse(localStorage.getItem("tg_features")) || [];
+  }
+}
+
+async function getFacilitiesList() {
+  if (isBackendActive) {
+    const res = await fetch('/api/facilities');
+    return await res.json();
+  } else {
+    return JSON.parse(localStorage.getItem("tg_facilities")) || [];
   }
 }
 
@@ -596,7 +682,7 @@ if (addCourseForm) {
     const cat = document.getElementById("newCourseCategory").value;
     const badge = document.getElementById("newCourseBadge").value.trim();
     const img = document.getElementById("newCourseImg").value.trim();
-    const desc = document.getElementById("newCourseDesc").value.trim();
+    const desc = quillCourseDesc ? quillCourseDesc.root.innerHTML.trim() : "";
     const feat1 = document.getElementById("newCourseFeat1").value.trim();
     const feat2 = document.getElementById("newCourseFeat2").value.trim();
     
@@ -614,6 +700,7 @@ if (addCourseForm) {
         if (res.ok) {
           alert("Course added successfully!");
           addCourseForm.reset();
+          if (quillCourseDesc) quillCourseDesc.root.innerHTML = '';
           renderCoursesTable();
         }
       } catch (err) {
@@ -626,6 +713,7 @@ if (addCourseForm) {
       localStorage.setItem("tg_courses", JSON.stringify(courses));
       alert("New course listing saved to local storage!");
       addCourseForm.reset();
+      if (quillCourseDesc) quillCourseDesc.root.innerHTML = '';
       renderCoursesTable();
     }
   });
@@ -694,7 +782,7 @@ if (addTestForm) {
     const name = document.getElementById("newTestName").value.trim();
     const role = document.getElementById("newTestRole").value.trim();
     const stars = parseInt(document.getElementById("newTestStars").value, 10);
-    const text = document.getElementById("newTestText").value.trim();
+    const text = quillTestText ? quillTestText.root.innerHTML.trim() : "";
     
     if (isBackendActive) {
       try {
@@ -707,6 +795,7 @@ if (addTestForm) {
         if (res.ok) {
           alert("Testimonial review added!");
           addTestForm.reset();
+          if (quillTestText) quillTestText.root.innerHTML = '';
           renderTestimonialsTable();
         }
       } catch (err) {
@@ -719,6 +808,7 @@ if (addTestForm) {
       localStorage.setItem("tg_testimonials", JSON.stringify(list));
       alert("New review feedback saved to local storage!");
       addTestForm.reset();
+      if (quillTestText) quillTestText.root.innerHTML = '';
       renderTestimonialsTable();
     }
   });
@@ -1007,10 +1097,449 @@ window.deleteFaculty = async function(id) {
 };
 
 // ==========================================================================
-// 10. Dashboard Initializer
+// 10. Site Content CMS Operations
+// ==========================================================================
+async function renderSiteContentSettings() {
+  try {
+    const content = await getSiteContentList();
+    if (content) {
+      document.getElementById("heroTagline").value = content.heroTagline || "";
+      document.getElementById("heroTitle").value = content.heroTitle || "";
+      document.getElementById("heroDesc").value = content.heroDesc || "";
+      document.getElementById("heroCardTitle").value = content.heroCardTitle || "";
+      document.getElementById("heroCardSubtitle").value = content.heroCardSubtitle || "";
+      document.getElementById("heroCardFeat1").value = content.heroCardFeat1 || "";
+      document.getElementById("heroCardFeat2").value = content.heroCardFeat2 || "";
+      document.getElementById("heroCardFeat3").value = content.heroCardFeat3 || "";
+      document.getElementById("heroCardFeat4").value = content.heroCardFeat4 || "";
+      document.getElementById("infraSubtitle").value = content.infraSubtitle || "";
+      document.getElementById("infraTitle").value = content.infraTitle || "";
+      document.getElementById("statExp").value = content.statExp || "";
+      document.getElementById("statSuccess").value = content.statSuccess || "";
+      document.getElementById("statMentored").value = content.statMentored || "";
+      document.getElementById("statBatch").value = content.statBatch || "";
+      document.getElementById("aboutTitle").value = content.aboutTitle || "";
+      document.getElementById("aboutDesc1").value = content.aboutDesc1 || "";
+      document.getElementById("aboutDesc2").value = content.aboutDesc2 || "";
+      document.getElementById("contactPhone1").value = content.contactPhone1 || "";
+      document.getElementById("contactPhone2").value = content.contactPhone2 || "";
+      document.getElementById("contactEmail").value = content.contactEmail || "";
+      document.getElementById("contactAddress").value = content.contactAddress || "";
+      document.getElementById("socialFacebook").value = content.socialFacebook || "";
+      document.getElementById("socialTwitter").value = content.socialTwitter || "";
+      document.getElementById("socialInstagram").value = content.socialInstagram || "";
+      document.getElementById("socialYoutube").value = content.socialYoutube || "";
+    }
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+const siteContentForm = document.getElementById("siteContentForm");
+if (siteContentForm) {
+  siteContentForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const payload = {
+      heroTagline: document.getElementById("heroTagline").value.trim(),
+      heroTitle: document.getElementById("heroTitle").value.trim(),
+      heroDesc: document.getElementById("heroDesc").value.trim(),
+      heroCardTitle: document.getElementById("heroCardTitle").value.trim(),
+      heroCardSubtitle: document.getElementById("heroCardSubtitle").value.trim(),
+      heroCardFeat1: document.getElementById("heroCardFeat1").value.trim(),
+      heroCardFeat2: document.getElementById("heroCardFeat2").value.trim(),
+      heroCardFeat3: document.getElementById("heroCardFeat3").value.trim(),
+      heroCardFeat4: document.getElementById("heroCardFeat4").value.trim(),
+      infraSubtitle: document.getElementById("infraSubtitle").value.trim(),
+      infraTitle: document.getElementById("infraTitle").value.trim(),
+      statExp: document.getElementById("statExp").value.trim(),
+      statSuccess: document.getElementById("statSuccess").value.trim(),
+      statMentored: document.getElementById("statMentored").value.trim(),
+      statBatch: document.getElementById("statBatch").value.trim(),
+      aboutTitle: document.getElementById("aboutTitle").value.trim(),
+      aboutDesc1: document.getElementById("aboutDesc1").value.trim(),
+      aboutDesc2: document.getElementById("aboutDesc2").value.trim(),
+      contactPhone1: document.getElementById("contactPhone1").value.trim(),
+      contactPhone2: document.getElementById("contactPhone2").value.trim(),
+      contactEmail: document.getElementById("contactEmail").value.trim(),
+      contactAddress: document.getElementById("contactAddress").value.trim(),
+      socialFacebook: document.getElementById("socialFacebook").value.trim(),
+      socialTwitter: document.getElementById("socialTwitter").value.trim(),
+      socialInstagram: document.getElementById("socialInstagram").value.trim(),
+      socialYoutube: document.getElementById("socialYoutube").value.trim()
+    };
+
+    if (isBackendActive) {
+      try {
+        const key = sessionStorage.getItem("tg_admin_key");
+        const res = await fetch('/api/content', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', 'x-admin-password': key },
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) alert("Site content updated successfully!");
+        else alert("Failed to update site content.");
+      } catch (err) {
+        alert("Server error during update.");
+      }
+    } else {
+      localStorage.setItem("tg_sitecontent", JSON.stringify(payload));
+      alert("Site content updated locally!");
+    }
+  });
+}
+
+// ==========================================================================
+// 11. Features Operations
+// ==========================================================================
+async function renderFeaturesTable() {
+  const tbody = document.querySelector("#adminFeaturesTable tbody");
+  if (!tbody) return;
+  tbody.innerHTML = "<tr><td colspan='4'>Loading...</td></tr>";
+
+  try {
+    const features = await getFeaturesList();
+    if (features.length === 0) {
+      tbody.innerHTML = "<tr><td colspan='4'>No features found.</td></tr>";
+      return;
+    }
+
+    tbody.innerHTML = features.map(f => `
+      <tr>
+        <td><i class="fa-solid ${f.icon}"></i></td>
+        <td><strong>${f.title}</strong></td>
+        <td>${f.desc}</td>
+        <td>
+          <button class="btn btn-sm btn-danger" onclick="deleteFeature('${f.id}')">Delete</button>
+        </td>
+      </tr>
+    `).join("");
+  } catch (err) {
+    console.error(err);
+    tbody.innerHTML = "<tr><td colspan='4'>Error loading features.</td></tr>";
+  }
+}
+
+const addFeatureForm = document.getElementById("addFeatureForm");
+if (addFeatureForm) {
+  addFeatureForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const newFeat = {
+      id: "feat_" + Date.now(),
+      title: document.getElementById("newFeatTitle").value.trim(),
+      icon: document.getElementById("newFeatIcon").value.trim(),
+      desc: document.getElementById("newFeatDesc").value.trim()
+    };
+
+    if (isBackendActive) {
+      try {
+        const key = sessionStorage.getItem("tg_admin_key");
+        const res = await fetch('/api/features', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-admin-password': key },
+          body: JSON.stringify(newFeat)
+        });
+        if (res.ok) {
+          alert("Feature added!");
+          addFeatureForm.reset();
+          renderFeaturesTable();
+        } else {
+          alert("Failed to add feature.");
+        }
+      } catch (err) {
+        alert("Server Error");
+      }
+    } else {
+      let feats = JSON.parse(localStorage.getItem("tg_features")) || [];
+      feats.push(newFeat);
+      localStorage.setItem("tg_features", JSON.stringify(feats));
+      alert("Feature added locally!");
+      addFeatureForm.reset();
+      renderFeaturesTable();
+    }
+  });
+}
+
+window.deleteFeature = async function(id) {
+  if (!confirm("Are you sure you want to delete this feature?")) return;
+
+  if (isBackendActive) {
+    try {
+      const key = sessionStorage.getItem("tg_admin_key");
+      const res = await fetch('/api/features/' + id, {
+        method: 'DELETE',
+        headers: { 'x-admin-password': key }
+      });
+      if (res.ok) {
+        alert("Feature deleted!");
+        renderFeaturesTable();
+      } else {
+        alert("Failed to delete feature.");
+      }
+    } catch (err) {
+      alert("Server Error");
+    }
+  } else {
+    let feats = JSON.parse(localStorage.getItem("tg_features")) || [];
+    feats = feats.filter(f => f.id !== id);
+    localStorage.setItem("tg_features", JSON.stringify(feats));
+    alert("Feature deleted locally!");
+    renderFeaturesTable();
+  }
+};
+
+// ==========================================================================
+// 12. Facilities Operations
+// ==========================================================================
+async function renderFacilitiesTable() {
+  const tbody = document.querySelector("#adminFacilitiesTable tbody");
+  if (!tbody) return;
+  tbody.innerHTML = "<tr><td colspan='4'>Loading...</td></tr>";
+
+  try {
+    const facilities = await getFacilitiesList();
+    if (facilities.length === 0) {
+      tbody.innerHTML = "<tr><td colspan='4'>No facilities found.</td></tr>";
+      return;
+    }
+
+    tbody.innerHTML = facilities.map(f => `
+      <tr>
+        <td><i class="fa-solid ${f.icon}"></i></td>
+        <td><strong>${f.title}</strong></td>
+        <td>${f.desc}</td>
+        <td>
+          <button class="btn btn-sm btn-danger" onclick="deleteFacility('${f.id}')">Delete</button>
+        </td>
+      </tr>
+    `).join("");
+  } catch (err) {
+    console.error(err);
+    tbody.innerHTML = "<tr><td colspan='4'>Error loading facilities.</td></tr>";
+  }
+}
+
+const addFacilityForm = document.getElementById("addFacilityForm");
+if (addFacilityForm) {
+  addFacilityForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const newFacil = {
+      id: "facil_" + Date.now(),
+      title: document.getElementById("newFacilTitle").value.trim(),
+      icon: document.getElementById("newFacilIcon").value.trim(),
+      desc: document.getElementById("newFacilDesc").value.trim()
+    };
+
+    if (isBackendActive) {
+      try {
+        const key = sessionStorage.getItem("tg_admin_key");
+        const res = await fetch('/api/facilities', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-admin-password': key },
+          body: JSON.stringify(newFacil)
+        });
+        if (res.ok) {
+          alert("Facility added!");
+          addFacilityForm.reset();
+          renderFacilitiesTable();
+        } else {
+          alert("Failed to add facility.");
+        }
+      } catch (err) {
+        alert("Server Error");
+      }
+    } else {
+      let facils = JSON.parse(localStorage.getItem("tg_facilities")) || [];
+      facils.push(newFacil);
+      localStorage.setItem("tg_facilities", JSON.stringify(facils));
+      alert("Facility added locally!");
+      addFacilityForm.reset();
+      renderFacilitiesTable();
+    }
+  });
+}
+
+window.deleteFacility = async function(id) {
+  if (!confirm("Are you sure you want to delete this facility?")) return;
+
+  if (isBackendActive) {
+    try {
+      const key = sessionStorage.getItem("tg_admin_key");
+      const res = await fetch('/api/facilities/' + id, {
+        method: 'DELETE',
+        headers: { 'x-admin-password': key }
+      });
+      if (res.ok) {
+        alert("Facility deleted!");
+        renderFacilitiesTable();
+      } else {
+        alert("Failed to delete facility.");
+      }
+    } catch (err) {
+      alert("Server Error");
+    }
+  } else {
+    let facils = JSON.parse(localStorage.getItem("tg_facilities")) || [];
+    facils = facils.filter(f => f.id !== id);
+    localStorage.setItem("tg_facilities", JSON.stringify(facils));
+    alert("Facility deleted locally!");
+    renderFacilitiesTable();
+  }
+};
+
+// ==========================================================================
+// 13. Gallery Image Browser Logic
+// ==========================================================================
+let currentTargetImageFieldId = null;
+
+document.addEventListener("click", async (e) => {
+  const btn = e.target.closest('.browse-gallery-btn');
+  if (btn) {
+    e.preventDefault();
+    currentTargetImageFieldId = btn.getAttribute("data-target");
+    await openGalleryBrowser();
+  }
+});
+
+async function openGalleryBrowser() {
+  const modal = document.getElementById("galleryBrowserModal");
+  const grid = document.getElementById("galleryBrowserGrid");
+  if (!modal || !grid) return;
+  
+  grid.innerHTML = "<p>Loading gallery images...</p>";
+  modal.classList.remove("hidden");
+
+  try {
+    const galleryItems = await getGalleryList();
+    if (galleryItems.length === 0) {
+      grid.innerHTML = "<p style='grid-column: 1 / -1; text-align: center;'>No images found in the gallery.</p>";
+      return;
+    }
+    
+    grid.innerHTML = galleryItems.map(item => `
+      <div class="gallery-browser-item" style="cursor: pointer; border: 2px solid transparent; border-radius: 8px; overflow: hidden; transition: 0.2s;" onclick="selectGalleryImage('${item.url}')" onmouseover="this.style.borderColor='var(--admin-accent)'" onmouseout="this.style.borderColor='transparent'">
+        <img src="${item.url}" alt="${item.title}" style="width: 100%; height: 120px; object-fit: cover; display: block;">
+        <div style="padding: 8px; text-align: center; font-size: 0.8rem; color: var(--admin-text-main); background: #f8fafc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600;">${item.title}</div>
+      </div>
+    `).join("");
+  } catch (err) {
+    grid.innerHTML = "<p>Error loading gallery images.</p>";
+  }
+}
+
+window.selectGalleryImage = function(url) {
+  if (currentTargetImageFieldId) {
+    const targetInput = document.getElementById(currentTargetImageFieldId);
+    if (targetInput) {
+      targetInput.value = url;
+      
+      // Update preview image if available
+      const idPrefix = currentTargetImageFieldId.replace("new", "").replace("Img", "").replace("Url", "");
+      const previewImg = document.getElementById("preview" + idPrefix);
+      if (previewImg) {
+        previewImg.src = url;
+        previewImg.style.display = "block";
+      }
+    }
+  }
+  document.getElementById("galleryBrowserModal").classList.add("hidden");
+};
+
+const closeGalleryBrowserBtn = document.getElementById("closeGalleryBrowserBtn");
+if (closeGalleryBrowserBtn) {
+  closeGalleryBrowserBtn.addEventListener("click", () => {
+    document.getElementById("galleryBrowserModal").classList.add("hidden");
+  });
+}
+
+// ==========================================================================
+// 14. Drag and Drop File Upload Logic
+// ==========================================================================
+function setupDragAndDrop(dropZoneId, fileInputId, hiddenInputId, previewImgId) {
+  const dropZone = document.getElementById(dropZoneId);
+  const fileInput = document.getElementById(fileInputId);
+  const hiddenInput = document.getElementById(hiddenInputId);
+  const previewImg = document.getElementById(previewImgId);
+
+  if (!dropZone || !fileInput) return;
+
+  dropZone.addEventListener("click", (e) => {
+    if (e.target.tagName.toLowerCase() !== 'a') fileInput.click();
+  });
+
+  dropZone.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    dropZone.classList.add("dragover");
+  });
+
+  dropZone.addEventListener("dragleave", (e) => {
+    e.preventDefault();
+    dropZone.classList.remove("dragover");
+  });
+
+  dropZone.addEventListener("drop", (e) => {
+    e.preventDefault();
+    dropZone.classList.remove("dragover");
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      handleFileUpload(e.dataTransfer.files[0], dropZone, hiddenInput, previewImg);
+    }
+  });
+
+  fileInput.addEventListener("change", (e) => {
+    if (e.target.files && e.target.files.length > 0) {
+      handleFileUpload(e.target.files[0], dropZone, hiddenInput, previewImg);
+    }
+  });
+}
+
+async function handleFileUpload(file, dropZone, hiddenInput, previewImg) {
+  if (!file.type.startsWith("image/")) {
+    alert("Please upload a valid image file.");
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    const base64String = e.target.result;
+    previewImg.src = base64String;
+    previewImg.style.display = "block";
+
+    dropZone.classList.add("uploading");
+    try {
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-password": "admin@tajgurukul"
+        },
+        body: JSON.stringify({ imageBase64: base64String })
+      });
+
+      if (!response.ok) throw new Error("Upload failed");
+      
+      const data = await response.json();
+      hiddenInput.value = data.url;
+    } catch (err) {
+      alert("Error uploading image: " + err.message);
+      previewImg.style.display = "none";
+    } finally {
+      dropZone.classList.remove("uploading");
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+function initDragAndDrop() {
+  setupDragAndDrop("dropZoneCourse", "fileInputCourse", "newCourseImg", "previewCourse");
+  setupDragAndDrop("dropZoneFac", "fileInputFac", "newFacImg", "previewFac");
+  setupDragAndDrop("dropZoneGal", "fileInputGal", "newGalUrl", "previewGal");
+}
+
+// ==========================================================================
+// 15. Dashboard Initializer
 // ==========================================================================
 function initDashboard() {
   initTabNavigation();
+  initDragAndDrop();
   initLeadsFilters();
   renderAnalyticsDashboard();
   

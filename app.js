@@ -262,6 +262,9 @@ function initStatsCounter() {
 async function loadBackendData() {
   try {
     let faculty = [];
+    let siteContent = null;
+    let features = [];
+    let facilities = [];
 
     if (isBackendActive) {
       // Fetch from Server API
@@ -289,6 +292,21 @@ async function loadBackendData() {
         const facRes = await fetch('/api/faculty');
         if (facRes.ok) faculty = await facRes.json();
       } catch (e) { console.error("Error fetching faculty:", e); }
+
+      try {
+        const siteRes = await fetch('/api/content');
+        if (siteRes.ok) siteContent = await siteRes.json();
+      } catch (e) { console.error("Error fetching site content:", e); }
+
+      try {
+        const featRes = await fetch('/api/features');
+        if (featRes.ok) features = await featRes.json();
+      } catch (e) { console.error("Error fetching features:", e); }
+
+      try {
+        const facilRes = await fetch('/api/facilities');
+        if (facilRes.ok) facilities = await facilRes.json();
+      } catch (e) { console.error("Error fetching facilities:", e); }
     } else {
       // Load from LocalStorage
       announcements = JSON.parse(localStorage.getItem("tg_announcements")) || [];
@@ -296,6 +314,9 @@ async function loadBackendData() {
       testimonials = JSON.parse(localStorage.getItem("tg_testimonials")) || [];
       gallery = JSON.parse(localStorage.getItem("tg_gallery")) || [];
       faculty = JSON.parse(localStorage.getItem("tg_faculty")) || [];
+      siteContent = JSON.parse(localStorage.getItem("tg_sitecontent")) || null;
+      features = JSON.parse(localStorage.getItem("tg_features")) || [];
+      facilities = JSON.parse(localStorage.getItem("tg_facilities")) || [];
     }
 
     // A. Announcements marquee
@@ -325,7 +346,7 @@ async function loadBackendData() {
             </div>
             <div class="course-content">
               <h3 class="course-title">${c.name}</h3>
-              <p class="course-desc">${c.desc}</p>
+              <div class="course-desc">${c.desc}</div>
               <div class="course-features">
                 ${featHtml}
               </div>
@@ -352,7 +373,7 @@ async function loadBackendData() {
               <div class="testimonial-rating">
                 ${starsHtml}
               </div>
-              <p class="testimonial-text">"${t.text}"</p>
+              <div class="testimonial-text">${t.text}</div>
               <div class="student-info">
                 <span class="student-name">${t.name}</span>
                 <span class="student-class">${t.role}</span>
@@ -397,6 +418,69 @@ async function loadBackendData() {
       `).join("");
     }
     
+    // F. Why Choose Us Features
+    const whyChooseGrid = document.getElementById("whyChooseGrid");
+    if (whyChooseGrid && features.length > 0) {
+      whyChooseGrid.innerHTML = features.map(f => `
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid ${f.icon}"></i></div>
+          <h4>${f.title}</h4>
+          <p>${f.desc}</p>
+        </div>
+      `).join("");
+    }
+
+    // G. Campus & Facilities
+    const facilitiesGrid = document.getElementById("facilitiesGrid");
+    if (facilitiesGrid && facilities.length > 0) {
+      facilitiesGrid.innerHTML = facilities.map(f => `
+        <div class="facil-card">
+          <div class="facil-icon-box"><i class="fa-solid ${f.icon}"></i></div>
+          <div class="facil-content">
+            <h4>${f.title}</h4>
+            <p>${f.desc}</p>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    // H. Site Content CMS
+    if (siteContent) {
+      if (document.getElementById("heroTaglineDisp")) document.getElementById("heroTaglineDisp").innerText = siteContent.heroTagline || "Welcome to Taj Gurukul";
+      if (document.getElementById("heroTitleDisp")) document.getElementById("heroTitleDisp").innerHTML = siteContent.heroTitle || "Shape Your <span>Future</span> with Expert Guidance";
+      if (document.getElementById("heroDescDisp")) document.getElementById("heroDescDisp").innerText = siteContent.heroDesc || "";
+      
+      if (document.getElementById("heroCardTitleDisp")) document.getElementById("heroCardTitleDisp").innerText = siteContent.heroCardTitle || "";
+      if (document.getElementById("heroCardSubtitleDisp")) document.getElementById("heroCardSubtitleDisp").innerText = siteContent.heroCardSubtitle || "";
+      if (document.getElementById("heroCardFeat1Disp")) document.getElementById("heroCardFeat1Disp").innerText = siteContent.heroCardFeat1 || "";
+      if (document.getElementById("heroCardFeat2Disp")) document.getElementById("heroCardFeat2Disp").innerText = siteContent.heroCardFeat2 || "";
+      if (document.getElementById("heroCardFeat3Disp")) document.getElementById("heroCardFeat3Disp").innerText = siteContent.heroCardFeat3 || "";
+      if (document.getElementById("heroCardFeat4Disp")) document.getElementById("heroCardFeat4Disp").innerText = siteContent.heroCardFeat4 || "";
+
+      if (document.getElementById("statExpDisp")) document.getElementById("statExpDisp").setAttribute("data-target", siteContent.statExp || "15");
+      if (document.getElementById("statSuccessDisp")) document.getElementById("statSuccessDisp").setAttribute("data-target", siteContent.statSuccess || "95");
+      if (document.getElementById("statMentoredDisp")) document.getElementById("statMentoredDisp").setAttribute("data-target", siteContent.statMentored || "1500");
+      if (document.getElementById("statBatchDisp")) document.getElementById("statBatchDisp").setAttribute("data-target", siteContent.statBatch || "30");
+
+      if (document.getElementById("aboutTitleDisp")) document.getElementById("aboutTitleDisp").innerText = siteContent.aboutTitle || "";
+      if (document.getElementById("aboutDesc1Disp")) document.getElementById("aboutDesc1Disp").innerText = siteContent.aboutDesc1 || "Taj Gurukul is a leading coaching institute...";
+      if (document.getElementById("aboutDesc2Disp")) document.getElementById("aboutDesc2Disp").innerText = siteContent.aboutDesc2 || "Our concept-based learning methodology...";
+      
+      if (document.getElementById("infraSubtitleDisp")) document.getElementById("infraSubtitleDisp").innerText = siteContent.infraSubtitle || "OUR INFRASTRUCTURE";
+      if (document.getElementById("infraTitleDisp")) document.getElementById("infraTitleDisp").innerText = siteContent.infraTitle || "Campus & Facilities";
+
+      if (document.getElementById("topPhoneDisp")) document.getElementById("topPhoneDisp").innerHTML = `<i class="fa-solid fa-phone"></i> ${siteContent.contactPhone1 || "+91 95959 72517"}`;
+      if (document.getElementById("topEmailDisp")) document.getElementById("topEmailDisp").innerHTML = `<i class="fa-solid fa-envelope"></i> ${siteContent.contactEmail}`;
+
+      if (document.getElementById("footerAddressDisp")) document.getElementById("footerAddressDisp").innerText = siteContent.contactAddress || "Kamptee, Maharashtra";
+      if (document.getElementById("footerPhoneDisp")) document.getElementById("footerPhoneDisp").innerHTML = (siteContent.contactPhone1 || "") + "<br>" + (siteContent.contactPhone2 || "");
+      if (document.getElementById("footerEmailDisp")) document.getElementById("footerEmailDisp").innerText = siteContent.contactEmail || "";
+      
+      if (document.getElementById("socialFacebookDisp") && siteContent.socialFacebook) document.getElementById("socialFacebookDisp").href = siteContent.socialFacebook;
+      if (document.getElementById("socialTwitterDisp") && siteContent.socialTwitter) document.getElementById("socialTwitterDisp").href = siteContent.socialTwitter;
+      if (document.getElementById("socialInstagramDisp") && siteContent.socialInstagram) document.getElementById("socialInstagramDisp").href = siteContent.socialInstagram;
+      if (document.getElementById("socialYoutubeDisp") && siteContent.socialYoutube) document.getElementById("socialYoutubeDisp").href = siteContent.socialYoutube;
+    }
   } catch (err) {
     console.error("Error loading dynamic content:", err);
   }
