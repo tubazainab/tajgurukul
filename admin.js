@@ -3,7 +3,7 @@
    ========================================================================== */
 
 const isBackendActive = window.location.protocol.startsWith('http') && !window.location.search.includes('offline=true');
-const ADMIN_PASSWORD = "admin@tajgurukul";
+const ADMIN_PASSWORD = "Tajgurukul@123";
 
 let quillCourseDesc, quillTestText;
 document.addEventListener("DOMContentLoaded", () => {
@@ -1509,7 +1509,7 @@ async function handleFileUpload(file, dropZone, hiddenInput, previewImg) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-admin-password": "admin@tajgurukul"
+          "x-admin-password": sessionStorage.getItem("tg_admin_key") || ADMIN_PASSWORD
         },
         body: JSON.stringify({ imageBase64: base64String })
       });

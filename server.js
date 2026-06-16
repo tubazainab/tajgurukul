@@ -173,7 +173,7 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(express.static(__dirname));
 
-const ADMIN_PASSWORD = "admin@tajgurukul";
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "Tajgurukul@123";
 function verifyAdmin(req, res, next) {
   const reqPassword = req.headers['x-admin-password'];
   if (reqPassword === ADMIN_PASSWORD) {
