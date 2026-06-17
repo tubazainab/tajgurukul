@@ -1676,13 +1676,13 @@ async function renderUsersTable() {
   tbody.innerHTML = "";
   users.forEach(user => {
     const tr = document.createElement("tr");
-    tr.innerHTML = \
-      <td style="font-weight: 600;">\</td>
-      <td><span class="status-badge status-\">\</span></td>
+    tr.innerHTML = `
+      <td style="font-weight: 600;">${user.username}</td>
+      <td><span class="status-badge status-${user.role}">${user.role}</span></td>
       <td>
-        <button class="btn btn-secondary btn-sm" onclick="deleteUser('\')"><i class="fa-solid fa-trash"></i> Delete</button>
+        <button class="btn btn-delete action-btn" style="width: auto; padding: 4px 10px;" onclick="deleteUser('${user.id}')"><i class="fa-solid fa-trash"></i> Delete</button>
       </td>
-    \;
+    `;
     tbody.appendChild(tr);
   });
 }
