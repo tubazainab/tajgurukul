@@ -13,6 +13,23 @@ document.addEventListener("DOMContentLoaded", () => {
   if (document.getElementById("newTestTextEditor")) {
     quillTestText = new Quill('#newTestTextEditor', { theme: 'snow', placeholder: 'Paste the feedback comments here...' });
   }
+  
+  // Mobile Sidebar Toggle
+  const toggleBtn = document.getElementById("adminMobileToggle");
+  const sidebar = document.getElementById("adminSidebar");
+  const overlay = document.getElementById("adminSidebarOverlay");
+  
+  if (toggleBtn && sidebar && overlay) {
+    toggleBtn.addEventListener("click", () => {
+      sidebar.classList.toggle("open");
+      overlay.classList.toggle("active");
+    });
+    
+    overlay.addEventListener("click", () => {
+      sidebar.classList.remove("open");
+      overlay.classList.remove("active");
+    });
+  }
 });
 
 // Default Mock Data for Offline fallbacks
@@ -341,6 +358,14 @@ function initTabNavigation() {
       }
       
       refreshTabContent(tabId);
+      
+      // Close sidebar on mobile
+      const sidebar = document.getElementById("adminSidebar");
+      const overlay = document.getElementById("adminSidebarOverlay");
+      if (window.innerWidth <= 768 && sidebar && overlay) {
+        sidebar.classList.remove("open");
+        overlay.classList.remove("active");
+      }
     });
   });
 }

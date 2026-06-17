@@ -34,6 +34,8 @@
     </div>
   </div>
 
+  <div class="admin-sidebar-overlay" id="adminSidebarOverlay"></div>
+
   <!-- Admin Sidebar Layout -->
   <aside class="admin-sidebar" id="adminSidebar">
     <div class="admin-brand">
@@ -90,9 +92,14 @@
   <!-- Admin Main Working Area -->
   <main class="admin-main">
     <div class="admin-header">
-      <div class="admin-title-wrap">
-        <h2 id="currentTabTitle">Dashboard Overview</h2>
-        <p id="currentTabDesc">Real-time statistics, conversion analysis, and content directories.</p>
+      <div class="admin-title-wrap" style="display: flex; align-items: center; gap: 15px;">
+        <button id="adminMobileToggle" class="admin-mobile-toggle" style="display: none; background: none; border: none; font-size: 1.5rem; color: var(--admin-primary); cursor: pointer; padding: 0;">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <div>
+          <h2 id="currentTabTitle">Dashboard Overview</h2>
+          <p id="currentTabDesc">Real-time statistics, conversion analysis, and content directories.</p>
+        </div>
       </div>
       <div class="admin-user">
         <div class="logo-tagline" id="adminServerStatus" style="color: var(--primary-navy-light); font-weight:600;">Status: Checking Connection...</div>
