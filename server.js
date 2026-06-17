@@ -72,6 +72,12 @@ const siteContentSchema = new mongoose.Schema({
 });
 const SiteContent = mongoose.model('SiteContent', siteContentSchema);
 
+const userSchema = new mongoose.Schema({
+  id: String, username: { type: String, unique: true }, password: String, role: String
+});
+const User = mongoose.model('User', userSchema);
+
+
 // MOCK DATA SEEDING
 async function seedDb() {
   const count = await Course.countDocuments();
@@ -166,6 +172,16 @@ async function seedDb() {
     }).save();
   }
 
+  const userCount = await User.countDocuments();
+  if (userCount === 0) {
+    await new User({
+      id: "usr_" + Date.now(),
+      username: "admin",
+      password: "Tajgurukul@123",
+      role: "admin"
+    }).save();
+  }
+
   console.log("Database seeded.");
 }
 
@@ -173,17 +189,40 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(express.static(__dirname));
 
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "Tajgurukul@123";
-function verifyAdmin(req, res, next) {
-  const reqPassword = req.headers['x-admin-password'];
-  if (reqPassword === ADMIN_PASSWORD) {
+async function verifyAuth(req, res, next) {
+  const userId = req.headers['x-user-id'];
+  const userPass = req.headers['x-user-password'];
+  
+  if (!userId || !userPass) return res.status(401).json({ error: "Unauthorized access: Missing credentials" });
+  
+  const user = await User.findOne({ username: userId, password: userPass });
+  if (user) {
+    req.user = user;
     next();
   } else {
-    res.status(401).json({ error: "Unauthorized access: Invalid security key" });
+    res.status(401).json({ error: "Unauthorized access: Invalid credentials" });
   }
 }
 
-app.post('/api/upload', verifyAdmin, async (req, res) => {
+function requireAdmin(req, res, next) {
+  if (req.user && req.user.role === 'admin') {
+    next();
+  } else {
+    res.status(403).json({ error: "Forbidden: Admin access required" });
+  }
+}
+
+app.post('/api/login', async (req, res) => {
+  const { username, password } = req.body;
+  const user = await User.findOne({ username, password });
+  if (user) {
+    res.json({ success: true, role: user.role });
+  } else {
+    res.status(401).json({ error: "Invalid credentials" });
+  }
+});
+
+app.post('/api/upload', verifyAuth, async (req, res) => {
   try {
     const { imageBase64 } = req.body;
     if (!imageBase64) return res.status(400).json({ error: "No image provided" });
@@ -216,7 +255,7 @@ app.get('/api/courses', async (req, res) => {
   res.json(courses);
 });
 
-app.post('/api/courses', verifyAdmin, async (req, res) => {
+app.post('/api/courses', verifyAuth, async (req, res) => {
   const { name, category, badge, desc, features, img } = req.body;
   if (!name || !category || !badge || !desc || !img) {
     return res.status(400).json({ error: "Missing required course fields" });
@@ -229,7 +268,7 @@ app.post('/api/courses', verifyAdmin, async (req, res) => {
   res.status(201).json(newCourse);
 });
 
-app.delete('/api/courses/:id', verifyAdmin, async (req, res) => {
+app.delete('/api/courses/:id', verifyAuth, async (req, res) => {
   const deleted = await Course.findOneAndDelete({ id: req.params.id });
   if (!deleted) return res.status(404).json({ error: "Course not found" });
   res.json({ success: true, message: "Course deleted successfully" });
@@ -242,7 +281,7 @@ app.get('/api/announcements', async (req, res) => {
   res.json(announcements.map(a => a.text));
 });
 
-app.post('/api/announcements', verifyAdmin, async (req, res) => {
+app.post('/api/announcements', verifyAuth, async (req, res) => {
   const { text } = req.body;
   if (!text) return res.status(400).json({ error: "Empty content" });
   await new Announcement({ text }).save();
@@ -250,7 +289,7 @@ app.post('/api/announcements', verifyAdmin, async (req, res) => {
   res.status(201).json(all.map(a => a.text));
 });
 
-app.delete('/api/announcements/:index', verifyAdmin, async (req, res) => {
+app.delete('/api/announcements/:index', verifyAuth, async (req, res) => {
   // admin.js passes the index of the array
   const index = parseInt(req.params.index, 10);
   const announcements = await Announcement.find();
@@ -270,7 +309,7 @@ app.get('/api/testimonials', async (req, res) => {
   res.json(testimonials);
 });
 
-app.post('/api/testimonials', verifyAdmin, async (req, res) => {
+app.post('/api/testimonials', verifyAuth, async (req, res) => {
   const { name, role, stars, text } = req.body;
   if (!name || !role || !stars || !text) return res.status(400).json({ error: "Missing fields" });
   const newTest = new Testimonial({
@@ -280,7 +319,7 @@ app.post('/api/testimonials', verifyAdmin, async (req, res) => {
   res.status(201).json(newTest);
 });
 
-app.delete('/api/testimonials/:id', verifyAdmin, async (req, res) => {
+app.delete('/api/testimonials/:id', verifyAuth, async (req, res) => {
   const deleted = await Testimonial.findOneAndDelete({ id: req.params.id });
   if (!deleted) return res.status(404).json({ error: "Testimonial not found" });
   res.json({ success: true });
@@ -292,7 +331,7 @@ app.get('/api/gallery', async (req, res) => {
   res.json(gallery);
 });
 
-app.post('/api/gallery', verifyAdmin, async (req, res) => {
+app.post('/api/gallery', verifyAuth, async (req, res) => {
   const { title, category, url } = req.body;
   if (!title || !category || !url) return res.status(400).json({ error: "Missing fields" });
   const newImg = new Gallery({ id: "gal_" + Date.now(), title, category, url });
@@ -300,7 +339,7 @@ app.post('/api/gallery', verifyAdmin, async (req, res) => {
   res.status(201).json(newImg);
 });
 
-app.delete('/api/gallery/:id', verifyAdmin, async (req, res) => {
+app.delete('/api/gallery/:id', verifyAuth, async (req, res) => {
   const deleted = await Gallery.findOneAndDelete({ id: req.params.id });
   if (!deleted) return res.status(404).json({ error: "Not found" });
   res.json({ success: true });
@@ -312,7 +351,7 @@ app.get('/api/faculty', async (req, res) => {
   res.json(faculty);
 });
 
-app.post('/api/faculty', verifyAdmin, async (req, res) => {
+app.post('/api/faculty', verifyAuth, async (req, res) => {
   const { name, role, qual, img } = req.body;
   if (!name || !role || !qual || !img) return res.status(400).json({ error: "Missing fields" });
   const newFac = new Faculty({ id: "fac_" + Date.now(), name, role, qual, img });
@@ -320,7 +359,7 @@ app.post('/api/faculty', verifyAdmin, async (req, res) => {
   res.status(201).json(newFac);
 });
 
-app.delete('/api/faculty/:id', verifyAdmin, async (req, res) => {
+app.delete('/api/faculty/:id', verifyAuth, async (req, res) => {
   const deleted = await Faculty.findOneAndDelete({ id: req.params.id });
   if (!deleted) return res.status(404).json({ error: "Not found" });
   res.json({ success: true });
@@ -344,12 +383,12 @@ app.post('/api/leads', async (req, res) => {
   res.status(201).json(newLead);
 });
 
-app.get('/api/leads', verifyAdmin, async (req, res) => {
+app.get('/api/leads', verifyAuth, async (req, res) => {
   const leads = await Lead.find();
   res.json(leads);
 });
 
-app.put('/api/leads/:id/status', verifyAdmin, async (req, res) => {
+app.put('/api/leads/:id/status', verifyAuth, async (req, res) => {
   const { status } = req.body;
   if (!status) return res.status(400).json({ error: "Status value required" });
   const lead = await Lead.findOneAndUpdate({ id: req.params.id }, { status }, { new: true });
@@ -357,7 +396,7 @@ app.put('/api/leads/:id/status', verifyAdmin, async (req, res) => {
   res.json(lead);
 });
 
-app.delete('/api/leads/:id', verifyAdmin, async (req, res) => {
+app.delete('/api/leads/:id', verifyAuth, async (req, res) => {
   const deleted = await Lead.findOneAndDelete({ id: req.params.id });
   if (!deleted) return res.status(404).json({ error: "Not found" });
   res.json({ success: true });
@@ -368,12 +407,12 @@ app.get('/api/features', async (req, res) => {
   const features = await Feature.find({});
   res.json(features);
 });
-app.post('/api/features', verifyAdmin, async (req, res) => {
+app.post('/api/features', verifyAuth, async (req, res) => {
   const newFeature = new Feature(req.body);
   await newFeature.save();
   res.json({ success: true });
 });
-app.delete('/api/features/:id', verifyAdmin, async (req, res) => {
+app.delete('/api/features/:id', verifyAuth, async (req, res) => {
   await Feature.deleteOne({ id: req.params.id });
   res.json({ success: true });
 });
@@ -383,12 +422,12 @@ app.get('/api/facilities', async (req, res) => {
   const facilities = await Facility.find({});
   res.json(facilities);
 });
-app.post('/api/facilities', verifyAdmin, async (req, res) => {
+app.post('/api/facilities', verifyAuth, async (req, res) => {
   const newFacility = new Facility(req.body);
   await newFacility.save();
   res.json({ success: true });
 });
-app.delete('/api/facilities/:id', verifyAdmin, async (req, res) => {
+app.delete('/api/facilities/:id', verifyAuth, async (req, res) => {
   await Facility.deleteOne({ id: req.params.id });
   res.json({ success: true });
 });
@@ -399,9 +438,33 @@ app.get('/api/content', async (req, res) => {
   res.json(content || {});
 });
 
-app.put('/api/content', verifyAdmin, async (req, res) => {
+app.put('/api/content', verifyAuth, async (req, res) => {
   const updated = await SiteContent.findOneAndUpdate({ id: "site_content" }, req.body, { new: true, upsert: true });
   res.json(updated);
+});
+
+// --- USERS / RBAC ---
+app.get('/api/users', verifyAuth, requireAdmin, async (req, res) => {
+  const users = await User.find({}, { password: 0 }); 
+  res.json(users);
+});
+
+app.post('/api/users', verifyAuth, requireAdmin, async (req, res) => {
+  const { username, password, role } = req.body;
+  if (!username || !password || !role) return res.status(400).json({ error: "Missing fields" });
+  
+  const existing = await User.findOne({ username });
+  if (existing) return res.status(400).json({ error: "Username already exists" });
+  
+  const newUser = new User({ id: "usr_" + Date.now(), username, password, role });
+  await newUser.save();
+  res.status(201).json({ success: true });
+});
+
+app.delete('/api/users/:id', verifyAuth, requireAdmin, async (req, res) => {
+  const deleted = await User.findOneAndDelete({ id: req.params.id });
+  if (!deleted) return res.status(404).json({ error: "User not found" });
+  res.json({ success: true });
 });
 
 app.listen(PORT, () => {

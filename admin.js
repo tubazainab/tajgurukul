@@ -211,20 +211,24 @@ async function checkAuth() {
   const loginOverlay = document.getElementById("loginOverlay");
   
   if (isBackendActive) {
-    const adminKey = sessionStorage.getItem("tg_admin_key") || "";
-    if (!adminKey) {
+    const userId = sessionStorage.getItem("tg_user_id") || "";
+    const userPass = sessionStorage.getItem("tg_user_password") || "";
+    if (!userId || !userPass) {
       if (loginOverlay) loginOverlay.classList.remove("hidden");
       return;
     }
     
     // Test API connection
     try {
-      const res = await fetch('/api/leads', { headers: { 'x-admin-password': adminKey } });
+      const res = await fetch('/api/leads', { headers: { 'x-user-id': userId, 'x-user-password': userPass } });
       if (res.status === 401) {
-        sessionStorage.removeItem("tg_admin_key");
+        sessionStorage.removeItem("tg_user_id");
+        sessionStorage.removeItem("tg_user_password");
+        sessionStorage.removeItem("tg_user_role");
         if (loginOverlay) loginOverlay.classList.remove("hidden");
       } else {
         if (loginOverlay) loginOverlay.classList.add("hidden");
+        applyRoleRestrictions();
         initDashboard();
       }
     } catch (err) {
@@ -236,15 +240,26 @@ async function checkAuth() {
   }
 }
 
+function applyRoleRestrictions() {
+  const role = sessionStorage.getItem("tg_user_role");
+  const accessNav = document.getElementById("navManageAccess");
+  if (role !== 'admin' && accessNav) {
+    accessNav.style.display = 'none';
+  } else if (accessNav) {
+    accessNav.style.display = 'flex';
+  }
+}
+
 function checkOfflineAuthFallback(loginOverlay) {
   dbInitOffline();
   const isLogged = sessionStorage.getItem("tg_logged_in");
-  // Also check if they had a backend key but the backend just died
-  const adminKey = sessionStorage.getItem("tg_admin_key");
+  const userId = sessionStorage.getItem("tg_user_id");
+  const userPass = sessionStorage.getItem("tg_user_password");
   
-  if (isLogged === "true" || adminKey === ADMIN_PASSWORD) {
+  if (isLogged === "true" || (userId === "admin" && userPass === ADMIN_PASSWORD)) {
     if (loginOverlay) loginOverlay.classList.add("hidden");
-    sessionStorage.setItem("tg_logged_in", "true"); // sync it
+    sessionStorage.setItem("tg_logged_in", "true");
+    applyRoleRestrictions();
     initDashboard();
   } else {
     if (loginOverlay) loginOverlay.classList.remove("hidden");
@@ -256,49 +271,61 @@ const loginForm = document.getElementById("adminLoginForm");
 if (loginForm) {
   loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
+    const enteredUser = document.getElementById("adminUsername").value;
     const enteredPass = document.getElementById("adminPassword").value;
     const errorMsg = document.getElementById("loginErrorMsg");
     
     if (isBackendActive) {
       try {
-        const res = await fetch('/api/leads', { headers: { 'x-admin-password': enteredPass } });
+        const res = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: enteredUser, password: enteredPass })
+        });
         if (res.ok) {
-          sessionStorage.setItem("tg_admin_key", enteredPass);
+          const data = await res.json();
+          sessionStorage.setItem("tg_user_id", enteredUser);
+          sessionStorage.setItem("tg_user_password", enteredPass);
+          sessionStorage.setItem("tg_user_role", data.role);
           if (errorMsg) errorMsg.style.display = "none";
           const loginOverlay = document.getElementById("loginOverlay");
           if (loginOverlay) loginOverlay.classList.add("hidden");
+          document.getElementById("adminUsername").value = "";
           document.getElementById("adminPassword").value = "";
+          applyRoleRestrictions();
           initDashboard();
-        } else if (res.status === 401) {
+        } else {
           if (errorMsg) {
-            errorMsg.innerText = "Invalid Access Key! Please try again.";
+            errorMsg.innerText = "Invalid Credentials! Please try again.";
             errorMsg.style.display = "block";
           }
-        } else {
-          // Backend returned something else (e.g. 404 on Github Pages) - fallback to offline check
-          handleOfflineLoginFallback(enteredPass, errorMsg);
         }
       } catch (err) {
         console.warn("Backend fetch failed, falling back to offline mode.");
-        handleOfflineLoginFallback(enteredPass, errorMsg);
+        handleOfflineLoginFallback(enteredUser, enteredPass, errorMsg);
       }
     } else {
-      handleOfflineLoginFallback(enteredPass, errorMsg);
+      handleOfflineLoginFallback(enteredUser, enteredPass, errorMsg);
     }
   });
 }
 
-function handleOfflineLoginFallback(enteredPass, errorMsg) {
-  if (enteredPass === ADMIN_PASSWORD) {
+function handleOfflineLoginFallback(enteredUser, enteredPass, errorMsg) {
+  if (enteredUser === "admin" && enteredPass === ADMIN_PASSWORD) {
+    sessionStorage.setItem("tg_user_id", "admin");
+    sessionStorage.setItem("tg_user_password", ADMIN_PASSWORD);
+    sessionStorage.setItem("tg_user_role", "admin");
     sessionStorage.setItem("tg_logged_in", "true");
     if (errorMsg) errorMsg.style.display = "none";
     const loginOverlay = document.getElementById("loginOverlay");
     if (loginOverlay) loginOverlay.classList.add("hidden");
+    document.getElementById("adminUsername").value = "";
     document.getElementById("adminPassword").value = "";
+    applyRoleRestrictions();
     initDashboard();
   } else {
     if (errorMsg) {
-      errorMsg.innerText = "Invalid Access Key! Please try again.";
+      errorMsg.innerText = "Invalid Credentials! Please try again.";
       errorMsg.style.display = "block";
     }
   }
@@ -309,11 +336,20 @@ const logoutBtn = document.getElementById("adminLogoutBtn");
 if (logoutBtn) {
   logoutBtn.addEventListener("click", () => {
     if (confirm("Are you sure you want to log out?")) {
-      sessionStorage.removeItem("tg_admin_key");
+      sessionStorage.removeItem("tg_user_id");
+      sessionStorage.removeItem("tg_user_password");
+      sessionStorage.removeItem("tg_user_role");
       sessionStorage.removeItem("tg_logged_in");
       checkAuth();
     }
   });
+}
+
+function getAuthHeaders() {
+  return {
+    'x-user-id': sessionStorage.getItem("tg_user_id") || "",
+    'x-user-password': sessionStorage.getItem("tg_user_password") || ""
+  };
 }
 
 // ==========================================================================
@@ -330,7 +366,8 @@ const TAB_DETAILS = {
   faculty: { title: "Manage Campus Faculty", desc: "Add, review, or delete active faculty members." },
   sitecontent: { title: "Site Content Settings", desc: "Manage text and contact details across the website." },
   features: { title: "Manage Features", desc: "Add, review, or delete 'Why Choose Us' features." },
-  facilities: { title: "Manage Facilities", desc: "Add, review, or delete infrastructure facilities." }
+  facilities: { title: "Manage Facilities", desc: "Add, review, or delete infrastructure facilities." },
+  access: { title: "Manage Employee Access", desc: "Add or remove access for administrative employees." }
 };
 
 function initTabNavigation() {
@@ -393,6 +430,8 @@ function refreshTabContent(tabId) {
     renderFeaturesTable();
   } else if (tabId === "facilities") {
     renderFacilitiesTable();
+  } else if (tabId === "access") {
+    renderUsersTable();
   }
 }
 
@@ -401,8 +440,7 @@ function refreshTabContent(tabId) {
 // ==========================================================================
 async function getLeadsList() {
   if (isBackendActive) {
-    const key = sessionStorage.getItem("tg_admin_key");
-    const res = await fetch('/api/leads', { headers: { 'x-admin-password': key } });
+    const res = await fetch('/api/leads', { headers: getAuthHeaders() });
     if (res.status === 401) return handleSessionExpiry();
     return await res.json();
   } else {
@@ -637,10 +675,10 @@ async function renderLeadsTable(typeFilter) {
 window.updateLeadStatus = async function(leadId, newStatus, tabType) {
   if (isBackendActive) {
     try {
-      const key = sessionStorage.getItem("tg_admin_key");
+      
       const res = await fetch(`/api/leads/${leadId}/status`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json', 'x-admin-password': key },
+        headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
         body: JSON.stringify({ status: newStatus })
       });
       if (res.ok) renderLeadsTable(tabType);
@@ -663,10 +701,10 @@ window.deleteLead = async function(leadId, tabType) {
   if (!confirm("Delete this lead?")) return;
   if (isBackendActive) {
     try {
-      const key = sessionStorage.getItem("tg_admin_key");
+      
       const res = await fetch(`/api/leads/${leadId}`, {
         method: 'DELETE',
-        headers: { 'x-admin-password': key }
+        headers: getAuthHeaders()
       });
       if (res.ok) renderLeadsTable(tabType);
     } catch (err) {
@@ -736,10 +774,10 @@ if (addCourseForm) {
     
     if (isBackendActive) {
       try {
-        const key = sessionStorage.getItem("tg_admin_key");
+        
         const res = await fetch('/api/courses', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'x-admin-password': key },
+          headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
           body: JSON.stringify({ name, category: cat, badge, desc, img, features })
         });
         if (res.ok) {
@@ -768,10 +806,10 @@ window.deleteCourse = async function(id) {
   if (!confirm("Remove this course?")) return;
   if (isBackendActive) {
     try {
-      const key = sessionStorage.getItem("tg_admin_key");
+      
       const res = await fetch(`/api/courses/${id}`, {
         method: 'DELETE',
-        headers: { 'x-admin-password': key }
+        headers: getAuthHeaders()
       });
       if (res.ok) renderCoursesTable();
     } catch (err) {
@@ -831,10 +869,10 @@ if (addTestForm) {
     
     if (isBackendActive) {
       try {
-        const key = sessionStorage.getItem("tg_admin_key");
+        
         const res = await fetch('/api/testimonials', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'x-admin-password': key },
+          headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
           body: JSON.stringify({ name, role, stars, text })
         });
         if (res.ok) {
@@ -863,10 +901,10 @@ window.deleteTestimonial = async function(id) {
   if (!confirm("Delete testimonial?")) return;
   if (isBackendActive) {
     try {
-      const key = sessionStorage.getItem("tg_admin_key");
+      
       const res = await fetch(`/api/testimonials/${id}`, {
         method: 'DELETE',
-        headers: { 'x-admin-password': key }
+        headers: getAuthHeaders()
       });
       if (res.ok) renderTestimonialsTable();
     } catch (err) {
@@ -920,10 +958,10 @@ if (addGalForm) {
     
     if (isBackendActive) {
       try {
-        const key = sessionStorage.getItem("tg_admin_key");
+        
         const res = await fetch('/api/gallery', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'x-admin-password': key },
+          headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
           body: JSON.stringify({ title, category: cat, url })
         });
         if (res.ok) {
@@ -950,10 +988,10 @@ window.deleteGalleryImage = async function(id) {
   if (!confirm("Delete photo?")) return;
   if (isBackendActive) {
     try {
-      const key = sessionStorage.getItem("tg_admin_key");
+      
       const res = await fetch(`/api/gallery/${id}`, {
         method: 'DELETE',
-        headers: { 'x-admin-password': key }
+        headers: getAuthHeaders()
       });
       if (res.ok) renderGalleryTable();
     } catch (err) {
@@ -1003,10 +1041,10 @@ if (addAnnounceForm) {
     
     if (isBackendActive) {
       try {
-        const key = sessionStorage.getItem("tg_admin_key");
+        
         const res = await fetch('/api/announcements', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'x-admin-password': key },
+          headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
           body: JSON.stringify({ text })
         });
         if (res.ok) {
@@ -1033,10 +1071,10 @@ window.deleteAnnouncement = async function(index) {
   if (!confirm("Delete announcement headline?")) return;
   if (isBackendActive) {
     try {
-      const key = sessionStorage.getItem("tg_admin_key");
+      
       const res = await fetch(`/api/announcements/${index}`, {
         method: 'DELETE',
-        headers: { 'x-admin-password': key }
+        headers: getAuthHeaders()
       });
       if (res.ok) renderAnnouncementsTable();
     } catch (err) {
@@ -1093,10 +1131,10 @@ if (addFacultyForm) {
     
     if (isBackendActive) {
       try {
-        const key = sessionStorage.getItem("tg_admin_key");
+        
         const res = await fetch('/api/faculty', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'x-admin-password': key },
+          headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
           body: JSON.stringify({ name, role, qual, img })
         });
         if (res.ok) {
@@ -1123,10 +1161,10 @@ window.deleteFaculty = async function(id) {
   if (!confirm("Remove this faculty member?")) return;
   if (isBackendActive) {
     try {
-      const key = sessionStorage.getItem("tg_admin_key");
+      
       const res = await fetch(`/api/faculty/${id}`, {
         method: 'DELETE',
-        headers: { 'x-admin-password': key }
+        headers: getAuthHeaders()
       });
       if (res.ok) renderFacultyTable();
     } catch (err) {
@@ -1215,10 +1253,10 @@ if (siteContentForm) {
 
     if (isBackendActive) {
       try {
-        const key = sessionStorage.getItem("tg_admin_key");
+        
         const res = await fetch('/api/content', {
           method: 'PUT',
-          headers: { 'Content-Type': 'application/json', 'x-admin-password': key },
+          headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
           body: JSON.stringify(payload)
         });
         if (res.ok) alert("Site content updated successfully!");
@@ -1277,10 +1315,10 @@ if (addFeatureForm) {
 
     if (isBackendActive) {
       try {
-        const key = sessionStorage.getItem("tg_admin_key");
+        
         const res = await fetch('/api/features', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'x-admin-password': key },
+          headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
           body: JSON.stringify(newFeat)
         });
         if (res.ok) {
@@ -1309,10 +1347,10 @@ window.deleteFeature = async function(id) {
 
   if (isBackendActive) {
     try {
-      const key = sessionStorage.getItem("tg_admin_key");
+      
       const res = await fetch('/api/features/' + id, {
         method: 'DELETE',
-        headers: { 'x-admin-password': key }
+        headers: getAuthHeaders()
       });
       if (res.ok) {
         alert("Feature deleted!");
@@ -1376,10 +1414,10 @@ if (addFacilityForm) {
 
     if (isBackendActive) {
       try {
-        const key = sessionStorage.getItem("tg_admin_key");
+        
         const res = await fetch('/api/facilities', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'x-admin-password': key },
+          headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
           body: JSON.stringify(newFacil)
         });
         if (res.ok) {
@@ -1408,10 +1446,10 @@ window.deleteFacility = async function(id) {
 
   if (isBackendActive) {
     try {
-      const key = sessionStorage.getItem("tg_admin_key");
+      
       const res = await fetch('/api/facilities/' + id, {
         method: 'DELETE',
-        headers: { 'x-admin-password': key }
+        headers: getAuthHeaders()
       });
       if (res.ok) {
         alert("Facility deleted!");
@@ -1601,3 +1639,96 @@ function initDashboard() {
 }
 
 document.addEventListener("DOMContentLoaded", checkAuth);
+
+// ==========================================================================
+// User / RBAC Management
+// ==========================================================================
+
+async function getUsersList() {
+  if (isBackendActive) {
+    const res = await fetch('/api/users', { headers: getAuthHeaders() });
+    if (res.status === 401 || res.status === 403) return [];
+    return await res.json();
+  } else {
+    // Offline mode: just return default
+    return [{ id: 'usr_default', username: 'admin', role: 'admin' }];
+  }
+}
+
+async function renderUsersTable() {
+  const tbody = document.querySelector("#adminEmployeesTable tbody");
+  if (!tbody) return;
+  
+  tbody.innerHTML = "<tr><td colspan='3' style='text-align:center;'>Loading...</td></tr>";
+  const users = await getUsersList();
+  
+  if (users.length === 0) {
+    tbody.innerHTML = "<tr><td colspan='3' style='text-align:center;'>No users found or access denied.</td></tr>";
+    return;
+  }
+  
+  tbody.innerHTML = "";
+  users.forEach(user => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = \
+      <td style="font-weight: 600;">\</td>
+      <td><span class="status-badge status-\">\</span></td>
+      <td>
+        <button class="btn btn-secondary btn-sm" onclick="deleteUser('\')"><i class="fa-solid fa-trash"></i> Delete</button>
+      </td>
+    \;
+    tbody.appendChild(tr);
+  });
+}
+
+const addEmployeeForm = document.getElementById("addEmployeeForm");
+if (addEmployeeForm) {
+  addEmployeeForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const username = document.getElementById("newEmpUsername").value;
+    const password = document.getElementById("newEmpPassword").value;
+    const role = document.getElementById("newEmpRole").value;
+    
+    if (isBackendActive) {
+      try {
+        const res = await fetch('/api/users', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
+          body: JSON.stringify({ username, password, role })
+        });
+        if (res.ok) {
+          alert("User created successfully!");
+          document.getElementById("newEmpUsername").value = "";
+          document.getElementById("newEmpPassword").value = "";
+          renderUsersTable();
+        } else {
+          const data = await res.json();
+          alert("Error: " + (data.error || "Failed to create user."));
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Network error.");
+      }
+    } else {
+      alert("Cannot create users in offline mode.");
+    }
+  });
+}
+
+async function deleteUser(id) {
+  if (!confirm("Are you sure you want to delete this user?")) return;
+  if (isBackendActive) {
+    try {
+      const res = await fetch('/api/users/' + id, { method: 'DELETE', headers: getAuthHeaders() });
+      if (res.ok) {
+        renderUsersTable();
+      } else {
+        alert("Failed to delete user.");
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  } else {
+    alert("Cannot delete users in offline mode.");
+  }
+}
