@@ -226,6 +226,9 @@ async function checkAuth() {
         sessionStorage.removeItem("tg_user_password");
         sessionStorage.removeItem("tg_user_role");
         if (loginOverlay) loginOverlay.classList.remove("hidden");
+      } else if (res.status === 404 || res.status === 405) {
+        console.warn("API not found, using offline fallback");
+        checkOfflineAuthFallback(loginOverlay);
       } else {
         if (loginOverlay) loginOverlay.classList.add("hidden");
         applyRoleRestrictions();
@@ -294,6 +297,9 @@ if (loginForm) {
           document.getElementById("adminPassword").value = "";
           applyRoleRestrictions();
           initDashboard();
+        } else if (res.status === 404 || res.status === 405) {
+          console.warn("API not found, using offline fallback");
+          handleOfflineLoginFallback(enteredUser, enteredPass, errorMsg);
         } else {
           if (errorMsg) {
             errorMsg.innerText = "Invalid Credentials! Please try again.";
@@ -311,7 +317,7 @@ if (loginForm) {
 }
 
 function handleOfflineLoginFallback(enteredUser, enteredPass, errorMsg) {
-  if (enteredUser === "admin" && enteredPass === ADMIN_PASSWORD) {
+  if (enteredUser.trim().toLowerCase() === "admin" && enteredPass === ADMIN_PASSWORD) {
     sessionStorage.setItem("tg_user_id", "admin");
     sessionStorage.setItem("tg_user_password", ADMIN_PASSWORD);
     sessionStorage.setItem("tg_user_role", "admin");
