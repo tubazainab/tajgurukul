@@ -1591,28 +1591,7 @@ async function handleFileUpload(file, dropZone, hiddenInput, previewImg) {
     const base64String = e.target.result;
     previewImg.src = base64String;
     previewImg.style.display = "block";
-
-    dropZone.classList.add("uploading");
-    try {
-      const response = await fetch("/api/upload", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...getAuthHeaders()
-        },
-        body: JSON.stringify({ imageBase64: base64String })
-      });
-
-      if (!response.ok) throw new Error("Upload failed");
-      
-      const data = await response.json();
-      hiddenInput.value = data.url;
-    } catch (err) {
-      alert("Error uploading image: " + err.message);
-      previewImg.style.display = "none";
-    } finally {
-      dropZone.classList.remove("uploading");
-    }
+    hiddenInput.value = base64String;
   };
   reader.readAsDataURL(file);
 }
