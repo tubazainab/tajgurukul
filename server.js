@@ -227,22 +227,9 @@ app.post('/api/upload', verifyAuth, async (req, res) => {
     const { imageBase64 } = req.body;
     if (!imageBase64) return res.status(400).json({ error: "No image provided" });
 
-    const matches = imageBase64.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
-    if (!matches || matches.length !== 3) {
-      return res.status(400).json({ error: "Invalid base64 format" });
-    }
-
-    // Attempt to parse extension from mime type
-    let ext = matches[1].split('/')[1] || 'png';
-    if (ext === 'jpeg') ext = 'jpg';
-
-    const buffer = Buffer.from(matches[2], 'base64');
-    const filename = `img_${Date.now()}_${Math.floor(Math.random() * 1000)}.${ext}`;
-    const filepath = path.join(uploadsDir, filename);
-
-    fs.writeFileSync(filepath, buffer);
-
-    res.json({ url: `/uploads/${filename}` });
+    // Vercel serverless environment has a read-only filesystem. 
+    // We return the base64 data URI directly to be stored in MongoDB.
+    res.json({ url: imageBase64 });
   } catch (error) {
     console.error("Upload error:", error);
     res.status(500).json({ error: "Failed to process image upload" });
