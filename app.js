@@ -3,7 +3,7 @@
    ========================================================================== */
 
 const WHATSAPP_CONTACT_PHONE = "919595972517";
-const isBackendActive = window.location.protocol.startsWith('http') && !window.location.search.includes('offline=true'); // True if served from HTTP/HTTPS and not overridden
+const isBackendActive = window.location.protocol.startsWith('http') && !window.location.search.includes('offline=true') && !window.location.hostname.includes('github.io'); // True if served from HTTP/HTTPS and not overridden
 
 // Default Mock Data for Offline fallbacks
 const DEFAULT_COURSES = [
