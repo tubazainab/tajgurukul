@@ -317,10 +317,17 @@ if (loginForm) {
 }
 
 function handleOfflineLoginFallback(enteredUser, enteredPass, errorMsg) {
-  if (enteredUser.trim().toLowerCase() === "admin" && enteredPass === ADMIN_PASSWORD) {
-    sessionStorage.setItem("tg_user_id", "admin");
-    sessionStorage.setItem("tg_user_password", ADMIN_PASSWORD);
-    sessionStorage.setItem("tg_user_role", "admin");
+  let users = JSON.parse(localStorage.getItem("tg_users"));
+  if (!users) {
+    users = [{ id: 'usr_default', username: 'admin', password: ADMIN_PASSWORD, role: 'admin' }];
+  }
+
+  const user = users.find(u => u.username.toLowerCase() === enteredUser.trim().toLowerCase() && u.password === enteredPass);
+
+  if (user) {
+    sessionStorage.setItem("tg_user_id", user.username);
+    sessionStorage.setItem("tg_user_password", user.password);
+    sessionStorage.setItem("tg_user_role", user.role);
     sessionStorage.setItem("tg_logged_in", "true");
     if (errorMsg) errorMsg.style.display = "none";
     const loginOverlay = document.getElementById("loginOverlay");
@@ -1635,8 +1642,9 @@ async function getUsersList() {
     if (res.status === 401 || res.status === 403) return [];
     return await res.json();
   } else {
-    // Offline mode: just return default
-    return [{ id: 'usr_default', username: 'admin', role: 'admin' }];
+    // Offline mode: fetch from local storage or return default
+    const localUsers = JSON.parse(localStorage.getItem("tg_users"));
+    return localUsers || [{ id: 'usr_default', username: 'admin', role: 'admin' }];
   }
 }
 
@@ -1695,7 +1703,17 @@ if (addEmployeeForm) {
         alert("Network error.");
       }
     } else {
-      alert("Cannot create users in offline mode.");
+      let users = JSON.parse(localStorage.getItem("tg_users")) || [{ id: 'usr_default', username: 'admin', password: ADMIN_PASSWORD, role: 'admin' }];
+      if (users.find(u => u.username.toLowerCase() === username.toLowerCase())) {
+        alert("Error: Username already exists.");
+        return;
+      }
+      users.push({ id: 'usr_' + Date.now(), username, password, role });
+      localStorage.setItem("tg_users", JSON.stringify(users));
+      alert("User created locally!");
+      document.getElementById("newEmpUsername").value = "";
+      document.getElementById("newEmpPassword").value = "";
+      renderUsersTable();
     }
   });
 }
@@ -1714,6 +1732,14 @@ async function deleteUser(id) {
       console.error(err);
     }
   } else {
-    alert("Cannot delete users in offline mode.");
+    let users = JSON.parse(localStorage.getItem("tg_users")) || [{ id: 'usr_default', username: 'admin', password: ADMIN_PASSWORD, role: 'admin' }];
+    if (users.length <= 1) {
+      alert("Cannot delete the last remaining user.");
+      return;
+    }
+    users = users.filter(u => u.id !== id);
+    localStorage.setItem("tg_users", JSON.stringify(users));
+    alert("User deleted locally!");
+    renderUsersTable();
   }
 }
