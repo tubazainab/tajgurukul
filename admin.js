@@ -2,7 +2,7 @@
    Taj Gurukul - Hybrid Offline/Online Admin Panel Dashboard Controller
    ========================================================================== */
 
-const isBackendActive = window.location.protocol.startsWith('http') && !window.location.search.includes('offline=true') && !window.location.hostname.includes('github.io');
+const isBackendActive = window.location.protocol.startsWith('http') && !window.location.search.includes('offline=true') && !window.location.hostname.includes('github.io') && !window.location.hostname.includes('vercel.app');
 const ADMIN_PASSWORD = "Tajgurukul@123";
 
 let quillCourseDesc, quillTestText;
