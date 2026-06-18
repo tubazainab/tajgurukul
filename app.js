@@ -469,12 +469,18 @@ async function loadBackendData() {
       if (document.getElementById("infraSubtitleDisp")) document.getElementById("infraSubtitleDisp").innerText = siteContent.infraSubtitle || "OUR INFRASTRUCTURE";
       if (document.getElementById("infraTitleDisp")) document.getElementById("infraTitleDisp").innerText = siteContent.infraTitle || "Campus & Facilities";
 
-      if (document.getElementById("topPhoneDisp")) document.getElementById("topPhoneDisp").innerHTML = `<i class="fa-solid fa-phone"></i> ${siteContent.contactPhone1 || "+91 95959 72517"}`;
-      if (document.getElementById("topEmailDisp")) document.getElementById("topEmailDisp").innerHTML = `<i class="fa-solid fa-envelope"></i> ${siteContent.contactEmail}`;
+      if (document.getElementById("topPhoneDisp")) {
+        document.getElementById("topPhoneDisp").innerHTML = `<i class="fa-solid fa-phone"></i> ${siteContent.contactPhone1 || "+91 95959 72517"}`;
+        document.getElementById("topPhoneDisp").href = `tel:${siteContent.contactPhone1 || "+919595972517"}`;
+      }
+      if (document.getElementById("topEmailDisp")) {
+        document.getElementById("topEmailDisp").innerHTML = `<i class="fa-solid fa-envelope"></i> ${siteContent.contactEmail || "tajgurukul.kamptee@gmail.com"}`;
+        document.getElementById("topEmailDisp").href = `mailto:${siteContent.contactEmail || "tajgurukul.kamptee@gmail.com"}`;
+      }
 
       if (document.getElementById("footerAddressDisp")) document.getElementById("footerAddressDisp").innerText = siteContent.contactAddress || "Kamptee, Maharashtra";
-      if (document.getElementById("footerPhoneDisp")) document.getElementById("footerPhoneDisp").innerHTML = (siteContent.contactPhone1 || "") + "<br>" + (siteContent.contactPhone2 || "");
-      if (document.getElementById("footerEmailDisp")) document.getElementById("footerEmailDisp").innerText = siteContent.contactEmail || "";
+      if (document.getElementById("footerPhoneDisp")) document.getElementById("footerPhoneDisp").innerHTML = (siteContent.contactPhone1 || "+91 95959 72517") + "<br>" + (siteContent.contactPhone2 || "");
+      if (document.getElementById("footerEmailDisp")) document.getElementById("footerEmailDisp").innerText = siteContent.contactEmail || "tajgurukul.kamptee@gmail.com";
       
       if (document.getElementById("socialFacebookDisp") && siteContent.socialFacebook) document.getElementById("socialFacebookDisp").href = siteContent.socialFacebook;
       if (document.getElementById("socialTwitterDisp") && siteContent.socialTwitter) document.getElementById("socialTwitterDisp").href = siteContent.socialTwitter;

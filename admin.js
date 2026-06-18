@@ -1598,7 +1598,7 @@ async function handleFileUpload(file, dropZone, hiddenInput, previewImg) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-admin-password": sessionStorage.getItem("tg_admin_key") || ADMIN_PASSWORD
+          ...getAuthHeaders()
         },
         body: JSON.stringify({ imageBase64: base64String })
       });
